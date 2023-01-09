@@ -1,0 +1,131 @@
+<template>
+  <BackOrStart :header="region.name" :navigator="[
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
+                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
+            ]"/>
+  <div class="grid">
+    <div class="col-9">
+      <div class="card mt-3 rounded-4">
+        <Chart type="line" :data="basicData" :options="basicOptions"/>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="card mt-3 rounded-4">
+        <Calendar v-model="date_range" dateFormat="dd.mm.yy" selectionMode="range"
+                  @date-select="update_date_range_params"/>
+        <p>{{ $t("Критерия") }}</p>
+        <Listbox v-model="selectedCriteria" :options="criteria" optionLabel="label" :multiple="true"/>
+      </div>
+    </div>
+  </div>
+  <h2 class="text-center">Махалла</h2>
+  <div class="grid row m-3 justify-content-around">
+    <div class="col-3" v-for="item in areas" :key="item">
+      <div class="card p-2">
+        <router-link
+            :to="{name: 'sector_id_region_id_area_id', params: {
+              sector_id: this.sector_id, region_id: region_id, area_id: item.area.id
+            }}"
+            class="text-decoration-none speedometer-label">
+          <speedometer :value="item.index" :label="item.area.name" :delta_index="item.delta_index"/>
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Speedometer from "@/components/Speedometer.vue";
+import BackOrStart from "@/components/BackOrStart.vue";
+import store from "@/store";
+
+export default {
+  name: "RegionInSector",
+  props: ['region_id', 'sector_id'],
+  components: {Speedometer, BackOrStart},
+  data() {
+    return {
+      params: {},
+      date_range: [new Date(new Date().setFullYear(new Date().getFullYear() - 1)), new Date()],
+      basicOptions: {
+        plugins: {
+          legend: {
+            labels: {
+              color: '#495057'
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: '#495057'
+            },
+            grid: {
+              color: '#ebedef'
+            }
+          },
+          y: {
+            ticks: {
+              color: '#495057'
+            },
+            grid: {
+              color: '#ebedef'
+            }
+          }
+        }
+      },
+      // basicData: {
+      //   labels: ['01.01.2022', '01.04.2022', '01.07.2022', '01.09.2022', '01.12.2022'],
+      //   datasets: [
+      //     {
+      //       label: `Регион - ${this.region_id}`,
+      //       data: [0.45, 0.5, 0.56, 0.52, 0.3],
+      //       fill: false,
+      //       borderColor: '#42A5F5',
+      //       tension: .4
+      //     },
+      //   ]
+      // },
+    }
+  },
+  async mounted() {
+    await store.dispatch('fetch_sector', this.sector_id)
+    await store.dispatch('fetch_region', this.region_id)
+    await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true})
+    await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false})
+  },
+  methods: {
+    async selected_bar(e) {
+      await this.$router.push({
+        name: 'sector_id_region_id_area_id_table_id',
+        params: {id: this.id, table_id: e.element.index}
+      })
+    },
+    update_date_range_params() {
+      console.log(this.date_range)
+    }
+  },
+  computed: {
+    basicData() {
+      return {
+        labels: store.state.region_line_chart_labels,
+        datasets: store.state.selectedRegionCriteria,
+      }
+    },
+    sector: () => store.state.sector,
+    region: () => store.state.region,
+    criteria: () => store.state.region_line_chart_data,
+    selectedCriteria: {
+      get: () => store.state.selectedRegionCriteria,
+      set(value) {
+        store.commit('basic', {key: 'selectedRegionCriteria', value: value})
+      }
+    },
+    areas: () => store.state.area_region_sector
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
