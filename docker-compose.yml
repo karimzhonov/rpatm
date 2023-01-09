@@ -1,0 +1,58 @@
+version: '3.3'
+
+services:
+  ichd_db:
+    container_name: ichd_db
+    image: postgres:15.0
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - db:/var/lib/postgresql/data
+  ichd_web:
+    container_name: ichd_web
+    build: ./backend
+    ports:
+      - 8000:8000
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - ichd_db
+    volumes:
+      - ./backend/:/app/
+
+  ichd_redis:
+    container_name: ichd_redis
+    image: redis:alpine
+  ichd_celery:
+    container_name: ichd_celery
+    build: ./backend/
+    command: celery -A backend worker -l info
+    volumes:
+      - ./backend/:/app/
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - ichd_db
+      - ichd_redis
+  ichd_front:
+    container_name: ichd_front
+    build: ./frontend
+    ports:
+      - 8080:8080
+    command: sh -c "npm run serve"
+    restart: always
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - ichd_db
+      - ichd_web
+    volumes:
+      - ./frontend/:/app/
+
+volumes:
+  db:
+    driver: local
