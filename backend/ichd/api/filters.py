@@ -26,12 +26,12 @@ class SectorTableFilter(filters.FilterSet):
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
-            return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
-        return queryset.filter(file_id__in=value)
+            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
+        return queryset.filter(file_id__in=value).order_by('-file__date')
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
-        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at).order_by('file__date')
 
 
 class RegionTableFilter(filters.FilterSet):
@@ -50,7 +50,7 @@ class RegionTableFilter(filters.FilterSet):
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
-        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at).order_by('file__date')
 
 
 class RegionSectorTableFilter(filters.FilterSet):
@@ -66,17 +66,17 @@ class RegionSectorTableFilter(filters.FilterSet):
     def filter_file(self, queryset, name, value):
         if value == ['0']:
             return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
-        return queryset.filter(file_id__in=value)
+        return queryset.filter(file_id__in=value).order_by('-file__date')
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
-        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at).order_by('file__date')
 
     def filter_region(self, queryset, name, value):
-        return queryset.filter(region_id__in=value).order_by('sector__number')
+        return queryset.filter(region_id__in=value).order_by('sector__number').order_by('file__date')
 
     def filter_sector(self, queryset, name, value):
-        return queryset.filter(sector_id__in=value).order_by('region__name')
+        return queryset.filter(sector_id__in=value).order_by('region__name').order_by('file__date')
 
 
 class AreaTableFilter(filters.FilterSet):
@@ -94,7 +94,7 @@ class AreaTableFilter(filters.FilterSet):
             return queryset.filter(file_id=Subquery(
                 Uploads.objects.filter(status='finished').order_by('-date')[:1].values('id')
             ))
-        return queryset.filter(file_id__in=value)
+        return queryset.filter(file_id__in=value).order_by('file__date')
 
 
 class DataTableFilter(filters.FilterSet):
@@ -109,7 +109,7 @@ class DataTableFilter(filters.FilterSet):
         fields = ['region', 'sector', 'area', 'file']
 
     def filter_parent_criteria(self, queryset, name, value):
-        return queryset.filter(criteria__parent_id__in=value)
+        return queryset.filter(criteria__parent_id__in=value).order_by('file__date')
 
 
 class UploadFilter(filters.FilterSet):

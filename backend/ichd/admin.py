@@ -9,7 +9,7 @@ from django.urls import NoReverseMatch, reverse
 from django.utils.html import format_html
 from django.utils.text import capfirst
 from django.contrib.admin.utils import NestedObjects, quote
-from .admin_filters import CriteriaParentFilter, FileFilter, SectorFilter, RegionFilter, AreaFilter, \
+from .admin_filters import CriteriaParentFilter, SectorFilter, RegionFilter, AreaFilter, \
     ModelCriteriaParentFilter
 from .models import (
     Region, Sector, Uploads,
@@ -135,7 +135,7 @@ class SectorTableAdmin(admin.ModelAdmin):
     list_display = ['order', 'get_delta_order', 'sector', 'get_file_name']
     list_display_links = ['sector']
     ordering = ['order']
-    list_filter = (FileFilter,)
+    list_filter = ("file",)
     search_fields = ['sector__number']
 
     def get_delta_order(self, instance):
@@ -158,7 +158,7 @@ class RegionTableAdmin(admin.ModelAdmin):
     inlines = [tabulers.RegionTableTabularAdmin]
     list_display = ['order', 'get_delta_order', 'region', 'get_file_name']
     list_display_links = ['region']
-    list_filter = (FileFilter,)
+    list_filter = ('file',)
     search_fields = ['region__name']
     ordering = ['order']
 
@@ -205,7 +205,7 @@ class AreaTableAdmin(admin.ModelAdmin):
     list_display = ('order', 'get_delta_order', 'area', 'region', 'sector', 'get_file_name')
     list_display_links = ['area']
     ordering = ['order']
-    list_filter = [RegionFilter, SectorFilter, 'area']
+    list_filter = [RegionFilter, SectorFilter, 'area', 'file']
     search_fields = ['area__name']
 
     def get_delta_order(self, instance):
@@ -227,4 +227,4 @@ class AreaTableAdmin(admin.ModelAdmin):
 class DataTableAdmin(admin.ModelAdmin):
     list_display = ['criteria', 'index', 'index_delta', 'region', 'sector', 'area']
     list_display_links = ['criteria']
-    list_filter = [ModelCriteriaParentFilter, RegionFilter, SectorFilter, AreaFilter]
+    list_filter = [ModelCriteriaParentFilter, RegionFilter, SectorFilter, AreaFilter, 'file']
