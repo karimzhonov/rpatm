@@ -1,15 +1,19 @@
 <template>
-  <BackOrStart/>
-  <div class="grid row m-3 justify-content-around">
+    <BackOrStart :header="criteria.name" :navigator="[
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
+                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
+                {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}}},
+                {label: criteria.name, to: {name: 'sector_id_region_id_area_id_table_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id, criteria_id: criteria_id}}},
+            ]"/>
+  <div class="grid row m-1 justify-content-around">
     <div class="card mt-3 rounded-4">
-      <h2 class="text-center">{{ criteria.name }}</h2>
       <div class="col-12">
         <MultiSelect
             :showToggleAll="false"
             v-model="selected"
             :options="options"
             option-label="name"
-            placeholder="Select date"
+            :placeholder="$t('Выберите квартал')"
             @change="multiselect_change"
             style="width:100%"
             class="mb-3"
@@ -18,7 +22,7 @@
           <div class="col">
             <div>
               <DataTable :value="data" showGridlines responsiveLayout="scroll">
-                <Column field="file" :header="$t('Файл')">
+                <Column field="file" :header="$t('Квартал')">
                   <template #body="slotProps">
                     <div>{{ slotProps.data[0].file.name }}</div>
                   </template>
@@ -79,6 +83,9 @@ export default {
   },
   async mounted() {
     store.commit('basic', {key: 'data', value: []})
+    await store.dispatch('fetch_sector', this.sector_id)
+    await store.dispatch('fetch_region', this.region_id)
+    await store.dispatch('fetch_area', this.area_id)
     await store.dispatch('fetch_criteria', this.criteria_id)
     const files = await store.dispatch('fetch_upload_files')
     await store.dispatch('fetch_criterias', {parent: this.criteria_id})
@@ -92,6 +99,9 @@ export default {
     })
   },
   computed: {
+  sector: () => store.state.sector,
+    region: () => store.state.region,
+    area: () => store.state.area,
     criteria: () => store.state.criteria,
     criteriaes: () => store.state.criteriaChildren,
     selected: {

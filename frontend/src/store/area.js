@@ -36,8 +36,8 @@ export default {
                         backgroundColor: await context.dispatch('get_random_color'),
                     })
                 }
-                context.commit('basic', {key: 'selectedAreaCriteria', value: [files[0]]})
-                context.commit('basic', {key: 'files', value: files})
+//                context.commit('basic', {key: 'selectedAreaCriteria', value: [files[0]]})
+//                context.commit('basic', {key: 'files', value: files})
                 context.commit('basic', {key: 'area_line_chart_data', value: datasets})
                 context.commit('basic', {key: 'area_line_chart_labels', value: criteria_list})
             }

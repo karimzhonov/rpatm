@@ -18,50 +18,77 @@ class CriteriaFilter(filters.FilterSet):
 class SectorTableFilter(filters.FilterSet):
     sector = filters.BaseInFilter()
     file = filters.BaseInFilter(method='filter_file')
+    date_range = filters.CharFilter(method='filter_date_range')
 
     class Meta:
         model = SectorTable
-        fields = ['sector', 'file']
+        fields = ['sector', 'file', 'date_range']
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
             return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
         return queryset.filter(file_id__in=value)
 
+    def filter_date_range(self, queryset, name, value):
+        from_at, to_at, *_ = value.split('-')
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+
 
 class RegionTableFilter(filters.FilterSet):
     region = filters.BaseInFilter()
-    file = filters.BaseInFilter()
+    file = filters.BaseInFilter(method='filter_file')
+    date_range = filters.CharFilter(method='filter_date_range')
 
     class Meta:
         model = RegionTable
-        fields = ['region', 'file']
+        fields = ['region', 'file', 'date_range']
+
+    def filter_file(self, queryset, name, value):
+        if value == ['0']:
+            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
+        return queryset.filter(file_id__in=value)
+
+    def filter_date_range(self, queryset, name, value):
+        from_at, to_at, *_ = value.split('-')
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
 
 
 class RegionSectorTableFilter(filters.FilterSet):
     region = filters.BaseInFilter()
     sector = filters.BaseInFilter()
     file = filters.BaseInFilter(method='filter_file')
+    date_range = filters.CharFilter(method='filter_date_range')
 
     class Meta:
         model = RegionSectorTable
-        fields = ['region', 'sector', 'file']
+        fields = ['region', 'sector', 'file', 'date_range']
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
             return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
         return queryset.filter(file_id__in=value)
 
+    def filter_date_range(self, queryset, name, value):
+        from_at, to_at, *_ = value.split('-')
+        return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+
 
 class AreaTableFilter(filters.FilterSet):
     region = filters.BaseInFilter()
     sector = filters.BaseInFilter()
     area = filters.BaseInFilter()
-    file = filters.BaseInFilter()
+    file = filters.BaseInFilter(method='filter_file')
 
     class Meta:
         model = AreaTable
         fields = ['area', 'file']
+
+    def filter_file(self, queryset, name, value):
+        if value == ['0']:
+            return queryset.filter(file_id=Subquery(
+                Uploads.objects.filter(status='finished').order_by('-date')[:1].values('id')
+            ))
+        return queryset.filter(file_id__in=value)
 
 
 class DataTableFilter(filters.FilterSet):

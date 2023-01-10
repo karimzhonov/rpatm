@@ -131,8 +131,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'api/v1.1/static/'
-MEDIA_URL = 'api/v1.1/media/'
+STATIC_URL = 'api/static/'
+MEDIA_URL = 'api/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / "static"
@@ -216,3 +216,5 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

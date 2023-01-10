@@ -31,10 +31,10 @@ export default {
                 for (let row of tables.data) {
                     sector_line_chart_labels.push(row.file.date)
                     for (let criteria of row.criteria) {
-                        if (criteria_data[criteria.id]) {
-                            criteria_data[criteria.id].data.push(criteria.index)
+                        if (criteria_data[criteria.criteria.name]) {
+                            criteria_data[criteria.criteria.name].data.push(criteria.index)
                         } else {
-                            criteria_data[criteria.id] = {
+                            criteria_data[criteria.criteria.name] = {
                                 label: criteria.criteria.name,
                                 data: [criteria.index],
                                 fill: false,

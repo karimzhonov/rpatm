@@ -5,7 +5,7 @@
                 {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}}},
             ]"/>
 
-  <div class="grid row m-3 justify-content-around">
+  <div class="grid row m-1 justify-content-around">
     <div class="card mt-3 rounded-4">
       <div class="col-12">
         <MultiSelect
@@ -14,7 +14,7 @@
             :options="options"
             option-label="name"
             placeholder="Select date"
-            @change="key += 1"
+            @change="multiselect_change"
             style="width:100%"
             class="mb-3"
         />
@@ -81,13 +81,32 @@ export default {
         })
       }
     },
+    async multiselect_change(e) {
+    const files = []
+    for (let file of e.value) {
+        files.push(file.id)
+    }
+    if (files.length > 0) {
+      await store.dispatch('fetch_area_region_sector', {
+          sector: this.sector_id,
+          region: this.region_id,
+          area: this.area_id,
+          chart: true,
+          parent_criteria: this.criteria_id,
+          file: files.join(','),
+        })
+      } else {
+      store.commit('basic', {key: 'area_line_chart_data', value: []})
+      }
+    }
   },
   async mounted() {
     await store.dispatch('fetch_sector', this.sector_id)
     await store.dispatch('fetch_region', this.region_id)
     await store.dispatch('fetch_area', this.area_id)
+    await store.dispatch('fetch_upload_files')
     await store.dispatch('fetch_area_region_sector', {
-      sector: this.sector_id, region: this.region_id, area: this.area_id, chart: true
+      sector: this.sector_id, region: this.region_id, area: this.area_id, chart: true, file: 0
     })
   },
   computed: {
@@ -95,9 +114,9 @@ export default {
     region: () => store.state.region,
     area: () => store.state.area,
     selected: {
-      get: () => store.state.selectedAreaCriteria,
+      get: () => store.state.selectedFiles,
       set(value) {
-        store.commit('basic', {key: 'selectedAreaCriteria', value: value})
+        store.commit('basic', {key: 'selectedFiles', value: value})
       }
     },
     basicData() {

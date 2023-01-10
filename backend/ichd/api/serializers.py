@@ -76,7 +76,7 @@ class SectorTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(SectorTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: SectorTable):
-        return SectorTableCriteriaSerializer(obj.sectortablecriteria_set.all(), many=True, context=self.context).data
+        return SectorTableCriteriaSerializer(obj.sectortablecriteria_set.all().order_by('criteria__order'), many=True, context=self.context).data
 
     @extend_schema_field(serializers.FloatField())
     def get_index(self, obj: SectorTable):
@@ -117,7 +117,7 @@ class RegionSectorTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(RegionSectorTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: RegionSectorTable):
-        return RegionSectorTableCriteriaSerializer(obj.regionsectortablecriteria_set.all(), many=True,
+        return RegionSectorTableCriteriaSerializer(obj.regionsectortablecriteria_set.all().order_by('criteria__order'), many=True,
                                                    context=self.context).data
 
     @extend_schema_field(serializers.FloatField())
@@ -152,7 +152,7 @@ class AreaTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(AreaTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: AreaTable):
-        return AreaTableCriteriaSerializer(obj.areatablecriteria_set.all(), many=True,
+        return AreaTableCriteriaSerializer(obj.areatablecriteria_set.all().order_by('criteria__order'), many=True,
                                            context=self.context).data
 
     @extend_schema_field(serializers.FloatField())

@@ -11,8 +11,8 @@
     </div>
     <div class="col-3">
       <div class="card mt-3 rounded-4">
-        <Calendar v-model="date_range" dateFormat="dd.mm.yy" selectionMode="range"
-                  @date-select="update_date_range_params"/>
+        <Calendar v-model="date_range" dateFormat="yy" selectionMode="range"
+                  @date-select="update_date_range_params" view="year"/>
         <p>{{ $t("Критерия") }}</p>
         <Listbox v-model="selectedCriteria" :options="criteria" optionLabel="label" :multiple="true"/>
       </div>
@@ -91,8 +91,8 @@ export default {
   async mounted() {
     await store.dispatch('fetch_sector', this.sector_id)
     await store.dispatch('fetch_region', this.region_id)
-    await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true})
-    await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false})
+    await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
+    await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false, file:0})
   },
   methods: {
     async selected_bar(e) {
@@ -101,8 +101,8 @@ export default {
         params: {id: this.id, table_id: e.element.index}
       })
     },
-    update_date_range_params() {
-      console.log(this.date_range)
+    async update_date_range_params() {
+      await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
     }
   },
   computed: {
