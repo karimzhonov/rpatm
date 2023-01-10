@@ -26,8 +26,8 @@ class SectorTableFilter(filters.FilterSet):
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
-            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
-        return queryset.filter(file_id__in=value).order_by('-file__date')
+            return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
+        return queryset.filter(file_id__in=value).order_by('file__date')
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
@@ -66,7 +66,7 @@ class RegionSectorTableFilter(filters.FilterSet):
     def filter_file(self, queryset, name, value):
         if value == ['0']:
             return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
-        return queryset.filter(file_id__in=value).order_by('-file__date')
+        return queryset.filter(file_id__in=value).order_by('file__date')
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
