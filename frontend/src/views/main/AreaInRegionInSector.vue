@@ -1,4 +1,10 @@
 <template>
+<div v-if="loading" class="layout-main row justify-content-center">
+        <div class="col">
+                    <ProgressSpinner style="top:30%; left:47%"/>
+                </div>
+  </div>
+  <div v-if="!loading">
   <BackOrStart :header="area.name" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
                 {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
@@ -26,6 +32,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -82,22 +89,22 @@ export default {
       }
     },
     async multiselect_change(e) {
-    const files = []
-    for (let file of e.value) {
-        files.push(file.id)
-    }
-    if (files.length > 0) {
-      await store.dispatch('fetch_area_region_sector', {
-          sector: this.sector_id,
-          region: this.region_id,
-          area: this.area_id,
-          chart: true,
-          parent_criteria: this.criteria_id,
-          file: files.join(','),
-        })
-      } else {
-      store.commit('basic', {key: 'area_line_chart_data', value: []})
-      }
+        const files = []
+        for (let file of e.value) {
+            files.push(file.id)
+        }
+        if (files.length > 0) {
+          await store.dispatch('fetch_area_region_sector', {
+              sector: this.sector_id,
+              region: this.region_id,
+              area: this.area_id,
+              chart: true,
+              parent_criteria: this.criteria_id,
+              file: files.join(','),
+            })
+          } else {
+          store.commit('basic', {key: 'area_line_chart_data', value: []})
+          }
     }
   },
   async mounted() {
@@ -108,6 +115,7 @@ export default {
     await store.dispatch('fetch_area_region_sector', {
       sector: this.sector_id, region: this.region_id, area: this.area_id, chart: true, file: 0
     })
+    store.commit('basic', {key: 'loading', value: false})
   },
   computed: {
     sector: () => store.state.sector,
@@ -125,7 +133,8 @@ export default {
         datasets: store.state.area_line_chart_data
       }
     },
-    options: () => store.state.files
+    options: () => store.state.files,
+    loading: () => store.state.loading,
   }
 }
 </script>

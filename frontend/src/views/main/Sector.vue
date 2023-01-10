@@ -1,4 +1,10 @@
 <template>
+<div v-if="loading" class="layout-main row justify-content-center">
+        <div class="col">
+                    <ProgressSpinner style="top:30%; left:47%"/>
+                </div>
+  </div>
+  <div v-if="!loading">
   <BackOrStart :header="`${$t('Сектор')} - ${sector.number}`" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
             ]"/>
@@ -34,6 +40,7 @@
         <Listbox v-model="selectedCriteria" :options="criteria" optionLabel="label" :multiple="true"/>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -83,10 +90,13 @@ export default {
     await store.dispatch('fetch_sector', this.sector_id)
     await store.dispatch('fetch_sector_tables', {sector: this.sector_id, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
     await store.dispatch('fetch_region_sectors', {sector: this.sector_id, file: 0, chart: false})
+    store.commit('basic', {key: 'loading', value: false})
   },
   methods: {
     async update_date_range_params() {
+    store.commit('basic', {key: 'loading', value: true})
        await store.dispatch('fetch_sector_tables', {sector: this.sector_id, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
+       store.commit('basic', {key: 'loading', value: false})
     }
   },
   computed: {
@@ -104,7 +114,8 @@ export default {
         store.commit('basic', {key: 'selectedSectorCriteria', value: value})
       }
     },
-    region_sectors: () => store.state.region_sectors
+    region_sectors: () => store.state.region_sectors,
+    loading: () => store.state.loading,
   }
 }
 </script>

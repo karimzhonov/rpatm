@@ -182,6 +182,7 @@ class RegionSectorTableAdmin(admin.ModelAdmin):
     inlines = [tabulers.RegionSectorTableTabularAdmin]
     list_display = ['order', 'get_delta_order', 'region', 'sector', 'get_file_name']
     list_display_links = ['region']
+    list_filter = ['sector', 'region', 'file']
 
     def get_delta_order(self, instance):
         html = instance.delta_order
@@ -204,7 +205,7 @@ class AreaTableAdmin(admin.ModelAdmin):
     list_display = ('order', 'get_delta_order', 'area', 'region', 'sector', 'get_file_name')
     list_display_links = ['area']
     ordering = ['order']
-    list_filter = [RegionFilter, SectorFilter]
+    list_filter = [RegionFilter, SectorFilter, 'area']
     search_fields = ['area__name']
 
     def get_delta_order(self, instance):

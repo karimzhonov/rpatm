@@ -54,7 +54,9 @@ export default {
               },
               value: {
                 formatter: function (val) {
-                  return Math.round(val * 10) / 1000;
+                    let value = Math.round(val * 10) / 1000
+                    value = `${value}000000`
+                  return value.slice(0, 5);
                 },
                 offsetY: -2,
                 fontSize: '22px'

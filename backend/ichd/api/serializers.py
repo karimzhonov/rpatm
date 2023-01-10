@@ -4,7 +4,7 @@ from drf_spectacular.utils import extend_schema_field
 from ichd.models import (
     Uploads, Sector, Region, Area, Criteria,
     SectorTable, RegionTable, RegionSectorTable, AreaTable,
-    DataTable, SectorTableCriteria, RegionSectorTableCriteria, AreaTableCriteria
+    DataTable, SectorTableCriteria, RegionSectorTableCriteria, AreaTableCriteria, RegionTableCriteria
 )
 
 
@@ -87,16 +87,42 @@ class SectorTableSerializer(serializers.ModelSerializer):
         return obj.sectortablecriteria_set.filter(criteria__main=True).order_by('criteria__order').first().delta
 
 
+class RegionTableCriteriaSerializer(serializers.ModelSerializer):
+    criteria = CriteriaSerializer()
+
+    class Meta:
+        model = RegionTableCriteria
+        fields = "__all__"
+
+
 class RegionTableSerializer(serializers.ModelSerializer):
     region = RegionSerializer()
+    criteria = serializers.SerializerMethodField()
+    index = serializers.SerializerMethodField()
+    delta_index = serializers.SerializerMethodField()
+    file = UploadSerializer()
 
     class Meta:
         model = RegionTable
         fields = "__all__"
 
+    @extend_schema_field(RegionTableCriteriaSerializer(many=True))
+    def get_criteria(self, obj: RegionTable):
+        return RegionTableCriteriaSerializer(obj.regiontablecriteria_set.all().order_by('criteria__order'), many=True,
+                                             context=self.context).data
+
+    @extend_schema_field(serializers.FloatField())
+    def get_index(self, obj: Region):
+        return obj.regiontablecriteria_set.filter(criteria__main=True).order_by('criteria__order').first().index
+
+    @extend_schema_field(serializers.FloatField())
+    def get_delta_index(self, obj: RegionTable):
+        return obj.regiontablecriteria_set.filter(criteria__main=True).order_by('criteria__order').first().delta
+
 
 class RegionSectorTableCriteriaSerializer(serializers.ModelSerializer):
     criteria = CriteriaSerializer()
+
 
     class Meta:
         model = RegionSectorTableCriteria

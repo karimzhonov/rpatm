@@ -9,7 +9,7 @@
     </h1>
     <div>
       <router-link to="/">
-        <Button label="Бош сахифага отиш"/>
+        <Button :label="$t('Перейти на главную страницу')"/>
       </router-link>
     </div>
   </div>

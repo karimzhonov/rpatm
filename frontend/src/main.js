@@ -118,6 +118,10 @@ const i18n = createI18n({
   messages: locale,
 });
 
+router.afterEach(to => {
+  store.commit('basic', {key: 'loading', value: true})
+})
+
 app.use(store)
 app.use(i18n)
 app.use(router);

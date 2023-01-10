@@ -50,18 +50,6 @@ const router = createRouter({
                     component: () => import('@/views/main/SectorInRegion.vue'),
                     props: true
                 },
-                {
-                    path: '/region/:region_id/sector/:sector_id/area/:area_id',
-                    name: 'region_id_sector_id_area_id',
-                    component: () => import('@/views/main/AreaInSectorInRegion.vue'),
-                    props: true,
-                },
-                {
-                    path: '/region/:region_id/sector/:sector_id/area/:area_id/table/:table_id',
-                    name: 'region_id_sector_id_area_id_table_id',
-                    component: () => import('@/views/main/TableAreaInSectorInRegion.vue'),
-                    props: true,
-                },
                 // {
                 //     path: '/uikit/input',
                 //     name: 'input',

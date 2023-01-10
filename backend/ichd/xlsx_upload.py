@@ -5,7 +5,7 @@ from . import models
 
 
 def parse_data(instance):
-    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'Данные', engine='openpyxl')
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'data', engine='openpyxl')
     data = []
     for row in xlsx.iloc:
         region, _ = models.Region.objects.get_or_create(name=row['region'])
@@ -31,7 +31,7 @@ def parse_data(instance):
 
 def parse_sector(instance):
     ignore_columns = ['Ўрин', 'Сектор', 'Ўрин ўзгариш']
-    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'Сектор', engine='openpyxl')
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'sector', engine='openpyxl')
     for row in xlsx.iloc:
         order = int(row['Ўрин'])
         try:
@@ -64,7 +64,7 @@ def parse_sector(instance):
 
 def parse_area(instance):
     ignore_columns = ['Ўрин', 'Туман', 'Сектор', 'Маҳалла', 'Ўрин ўзгариш']
-    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'Маҳалла', engine='openpyxl')
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'area', engine='openpyxl')
     for row in xlsx.iloc:
         order = int(row['Ўрин'])
         order_delta = int(row['Ўрин ўзгариш'])
@@ -99,7 +99,7 @@ def parse_area(instance):
 
 def parse_region(instance):
     ignore_columns = ['Ўрин', 'Туман', 'Ўрин ўзгариш']
-    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'Туман', engine='openpyxl')
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'region', engine='openpyxl')
 
     for row in xlsx.iloc:
         order = int(row['Ўрин'])
@@ -130,7 +130,7 @@ def parse_region(instance):
 
 def parse_region_sector(instance):
     ignore_columns = ['Ўрин', 'Туман', 'Сектор', 'Ўрин ўзгариш']
-    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'Туман-Сектор', engine='openpyxl')
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'region-sector', engine='openpyxl')
     for row in xlsx.iloc:
         order = int(row['Ўрин'])
         order_delta = int(row['Ўрин ўзгариш'])

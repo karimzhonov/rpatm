@@ -26,7 +26,7 @@ class SectorTableFilter(filters.FilterSet):
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
-            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
+            return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
         return queryset.filter(file_id__in=value)
 
     def filter_date_range(self, queryset, name, value):
@@ -45,7 +45,7 @@ class RegionTableFilter(filters.FilterSet):
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
-            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
+            return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
         return queryset.filter(file_id__in=value)
 
     def filter_date_range(self, queryset, name, value):
@@ -54,8 +54,8 @@ class RegionTableFilter(filters.FilterSet):
 
 
 class RegionSectorTableFilter(filters.FilterSet):
-    region = filters.BaseInFilter()
-    sector = filters.BaseInFilter()
+    region = filters.BaseInFilter(method='filter_region')
+    sector = filters.BaseInFilter(method='filter_sector')
     file = filters.BaseInFilter(method='filter_file')
     date_range = filters.CharFilter(method='filter_date_range')
 
@@ -65,12 +65,18 @@ class RegionSectorTableFilter(filters.FilterSet):
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
-            return queryset.filter(file_id=Subquery(queryset.order_by('file__date')[:1].values('file_id')))
+            return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
         return queryset.filter(file_id__in=value)
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
         return queryset.filter(file__date__year__gte=from_at, file__date__year__lte=to_at)
+
+    def filter_region(self, queryset, name, value):
+        return queryset.filter(region_id__in=value).order_by('sector__number')
+
+    def filter_sector(self, queryset, name, value):
+        return queryset.filter(sector_id__in=value).order_by('region__name')
 
 
 class AreaTableFilter(filters.FilterSet):

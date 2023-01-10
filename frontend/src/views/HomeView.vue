@@ -1,6 +1,12 @@
 <template>
+<div v-if="loading" class="layout-main row justify-content-center">
+        <div class="col">
+                    <ProgressSpinner style="top:30%; left:47%"/>
+                </div>
+  </div>
+  <div v-if="!loading">
   <div class="card rounded-4">
-    <h1 class="home-main-header mb-2">{{ $t("home.header") }}</h1>
+    <h1 class="home-main-header mb-2">{{ $t("индекс человеческого достоинства") }}</h1>
   </div>
   <div class="card rounded-4">
     <h2 class="text-center mb-3">По секторам</h2>
@@ -19,7 +25,7 @@
     <h2 class="text-center mb-3">По районам</h2>
     <Chart type="bar" :data="barData" :options="barOptions" @select="selected_bar"/>
   </div>
-
+</div>
 </template>
 
 <script>
@@ -31,16 +37,6 @@ export default {
   components: {Speedometer},
   data() {
     return {
-      barData: {
-        labels: ['Tuman - 1', 'Tuman - 2', 'Tuman - 3', 'Tuman - 4', 'Tuman - 5', 'Tuman - 6', 'Tuman - 7'],
-        datasets: [
-          {
-            label: '01.01.2023',
-            backgroundColor: '#42A5F5',
-            data: [65, 59, 80, 81, 56, 55, 40]
-          },
-        ]
-      },
       barOptions: {
         plugins: {
           legend: {
@@ -74,18 +70,28 @@ export default {
     await store.dispatch('fetch_sector_tables', {
       file: 0
     })
+    await store.dispatch('fetch_region_tables', {file: 0, chart: 'bar'})
+    store.commit('basic', {key: 'loading', value: false})
   },
   methods: {
     async selected_bar(e) {
+      const region = await store.dispatch('search_region', store.state.region_bar_chart_labels[e.element.index])
       await this.$router.push({
         name: 'region_id_sector', params: {
-          region_id: e.element.index,
+          region_id: region.id,
         }
       })
     },
   },
   computed: {
-    sector_tables: () => store.state.sector_tables
+    sector_tables: () => store.state.sector_tables,
+    barData: () => {
+        return {
+            labels: store.state.region_bar_chart_labels,
+            datasets: store.state.region_bar_chart_data
+        }
+    },
+    loading: () => store.state.loading,
   }
 }
 </script>

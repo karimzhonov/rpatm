@@ -25,6 +25,7 @@ class SectorView(ReadOnlyModelViewSet):
 
 class RegionView(ReadOnlyModelViewSet):
     serializer_class = RegionSerializer
+    search_fields = ['name']
 
     def get_queryset(self):
         return Region.objects.all()

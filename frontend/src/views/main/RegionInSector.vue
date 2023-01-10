@@ -1,8 +1,33 @@
 <template>
+<div v-if="loading" class="layout-main row justify-content-center">
+        <div class="col">
+                    <ProgressSpinner style="top:30%; left:47%"/>
+                </div>
+  </div>
+  <div v-if="!loading">
   <BackOrStart :header="region.name" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
                 {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
             ]"/>
+
+  <div class="grid row justify-content-around">
+    <div class="col-3" v-for="item in areas" :key="item">
+      <div class="card p-2">
+        <router-link
+            :to="{name: 'sector_id_region_id_area_id', params: {
+              sector_id: this.sector_id, region_id: region_id, area_id: item.area.id
+            }}"
+            class="text-decoration-none speedometer-label">
+          <speedometer :value="item.index" :label="item.area.name" :delta_index="item.delta_index"/>
+        </router-link>
+      </div>
+    </div>
+  </div>
+
+  <div class="card rounded-4 mb-3">
+    <h2 class="text-center m-0">{{ $t("Изменения индекса") }}</h2>
+  </div>
+
   <div class="grid">
     <div class="col-9">
       <div class="card mt-3 rounded-4">
@@ -18,19 +43,6 @@
       </div>
     </div>
   </div>
-  <h2 class="text-center">Махалла</h2>
-  <div class="grid row m-3 justify-content-around">
-    <div class="col-3" v-for="item in areas" :key="item">
-      <div class="card p-2">
-        <router-link
-            :to="{name: 'sector_id_region_id_area_id', params: {
-              sector_id: this.sector_id, region_id: region_id, area_id: item.area.id
-            }}"
-            class="text-decoration-none speedometer-label">
-          <speedometer :value="item.index" :label="item.area.name" :delta_index="item.delta_index"/>
-        </router-link>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -93,6 +105,7 @@ export default {
     await store.dispatch('fetch_region', this.region_id)
     await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
     await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false, file:0})
+    store.commit('basic', {key: 'loading', value: false})
   },
   methods: {
     async selected_bar(e) {
@@ -102,7 +115,9 @@ export default {
       })
     },
     async update_date_range_params() {
+      store.commit('basic', {key: 'loading', value: true})
       await store.dispatch('fetch_region_sectors', {region: this.region_id, sector: this.sector_id, chart: true, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
+      store.commit('basic', {key: 'loading', value: false})
     }
   },
   computed: {
@@ -121,7 +136,8 @@ export default {
         store.commit('basic', {key: 'selectedRegionCriteria', value: value})
       }
     },
-    areas: () => store.state.area_region_sector
+    areas: () => store.state.area_region_sector,
+    loading: () => store.state.loading,
   }
 }
 </script>

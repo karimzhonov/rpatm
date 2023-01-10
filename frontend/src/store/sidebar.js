@@ -7,7 +7,7 @@ export default {
         async fetch_sidebar(context) {
             const menu = []
             const sector_menu = {
-                label: 'sidebar.sector.header',
+                label: 'Сектора',
                 items: []
             }
             const sectors = await context.dispatch('fetch_sectors')
@@ -21,7 +21,7 @@ export default {
             }
             const regions = await context.dispatch('fetch_regions')
             const region_menu = {
-                label: 'sidebar.region.header',
+                label: 'Районы',
                 items: []
             }
             for (let region of regions) {

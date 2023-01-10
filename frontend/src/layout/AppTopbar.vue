@@ -89,7 +89,7 @@ export default {
       <a href="https://panel.tashkent.uz/ru" class="ml-3 text-decoration-none">
         <div class="flex flex-row">
           <img class="navbar-logo" :src="navbar_icon_1" alt="logo-1"/>
-          <div class="navbar-logo-text">{{ $t("departament_number") }}</div>
+          <div class="navbar-logo-text">{{ $t("Департамент цифрового развития") }}</div>
         </div>
       </a>
       <router-link to="/" class="ml-3">

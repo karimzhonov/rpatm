@@ -1,4 +1,10 @@
 <template>
+<div v-if="loading" class="layout-main row justify-content-center">
+        <div class="col">
+                    <ProgressSpinner style="top:30%; left:47%"/>
+                </div>
+  </div>
+  <div v-if="!loading">
     <BackOrStart :header="criteria.name" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
                 {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
@@ -38,6 +44,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -97,6 +104,7 @@ export default {
       parent_criteria: this.criteria_id,
       file: files[0].id,
     })
+    store.commit('basic', {key: 'loading', value: false})
   },
   computed: {
   sector: () => store.state.sector,
@@ -112,6 +120,7 @@ export default {
     },
     options: () => store.state.files,
     data: () => store.state.data,
+    loading: () => store.state.loading,
   },
   methods: {
     async multiselect_change(e) {

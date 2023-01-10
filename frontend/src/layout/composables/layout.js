@@ -9,7 +9,7 @@ const layoutConfig = reactive({
     theme: 'lara-light-indigo',
     scale: 14,
     activeMenuItem: null,
-    key: 1,
+    loading: true,
 });
 
 const layoutState = reactive({

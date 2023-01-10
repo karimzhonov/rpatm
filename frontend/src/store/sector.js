@@ -34,11 +34,15 @@ export default {
                         if (criteria_data[criteria.criteria.name]) {
                             criteria_data[criteria.criteria.name].data.push(criteria.index)
                         } else {
+                            let color = await context.dispatch('get_random_color')
+                            if (criteria.criteria.color) {
+                                color = `#${criteria.criteria.color}`
+                            }
                             criteria_data[criteria.criteria.name] = {
                                 label: criteria.criteria.name,
                                 data: [criteria.index],
                                 fill: false,
-                                borderColor: criteria.color ?? await context.dispatch('get_random_color'),
+                                borderColor: color,
                                 tension: .4
                             }
                         }

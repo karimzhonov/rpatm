@@ -10,7 +10,7 @@ import area from "@/store/area"
 import axios from "@/plugins/axios";
 
 export default createStore({
-    state: {files: [], data: [], selectedFiles: []},
+    state: {files: [], data: [], selectedFiles: [], loading: true},
     getters: {},
     mutations: {
         basic(state, {key, value}) {
