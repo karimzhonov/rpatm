@@ -6,9 +6,9 @@
   </div>
   <div v-if="!loading">
   <BackOrStart :header="area.name" :navigator="[
-                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
-                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
-                {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}}},
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
+                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id},  query: $route.query}},
+                {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id},  query: $route.query}},
             ]"/>
 
   <div class="grid row m-1 justify-content-around">
@@ -84,7 +84,7 @@ export default {
           name: 'sector_id_region_id_area_id_table_id', params: {
             sector_id: this.sector_id, criteria_id: criteria.id,
             region_id: this.region_id, area_id: this.area_id,
-          }
+          },  query: this.$route.query
         })
       }
     },
@@ -113,7 +113,7 @@ export default {
     await store.dispatch('fetch_area', this.area_id)
     await store.dispatch('fetch_upload_files')
     await store.dispatch('fetch_area_region_sector', {
-      sector: this.sector_id, region: this.region_id, area: this.area_id, chart: true, file: 0
+      sector: this.sector_id, region: this.region_id, area: this.area_id, chart: true, file: this.$route.query.file
     })
     store.commit('basic', {key: 'loading', value: false})
   },

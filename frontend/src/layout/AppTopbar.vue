@@ -24,6 +24,7 @@ export default {
     this.bindOutsideClickListener();
     const user_lang = store.getters.get_selected_lang
     store.commit('select_lang', {lang: user_lang || 'ru', i18n: this.$i18n})
+    store.dispatch('fetch_top_bar_files')
   },
   beforeUnmount() {
     this.unbindOutsideClickListener();
@@ -67,6 +68,15 @@ export default {
     language_change(e) {
       store.commit('select_lang', {lang: e.value, i18n: this.$i18n})
     },
+    year_change(e) {
+        store.commit('basic', {key: 'selected_year', value: e.value})
+    },
+    file_change(e) {
+        const url = new URL(window.location)
+        url.searchParams.set('file', e.value.id)
+        window.location = url
+        store.commit('basic', {key: 'selected_file', value: e.value})
+    }
   },
   computed: {
     topbarMenuClasses() {
@@ -75,7 +85,10 @@ export default {
       };
     },
     language_menu_items: () => store.getters.get_languages,
-    selected_lang: () => store.getters.get_selected_lang
+    selected_lang: () => store.getters.get_selected_lang,
+    top_bar_years: () => store.state.top_bar_years,
+    selected_file: () => store.state.selected_file,
+    selected_year: () => store.state.selected_year,
   }
 }
 </script>
@@ -113,6 +126,17 @@ export default {
     </button>
 
     <div class="layout-topbar-menu" :class="topbarMenuClasses">
+
+      <Dropdown class="ml-3" :options="selected_year.files" optionLabel="name"
+                :model-value="selected_file"
+                @change="file_change" inputStyle="padding: 1rem"
+      />
+
+      <Dropdown class="ml-3" :options="top_bar_years" optionLabel="year"
+                :model-value="selected_year"
+                @change="year_change" inputStyle="padding: 1rem"
+      />
+
       <Dropdown class="ml-3" :options="language_menu_items" optionLabel="lang"
                 optionValue="code" :model-value="selected_lang"
                 @change="language_change" inputStyle="padding: 1rem"

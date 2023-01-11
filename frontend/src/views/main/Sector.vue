@@ -6,13 +6,13 @@
   </div>
   <div v-if="!loading">
   <BackOrStart :header="`${$t('Сектор')} - ${sector.number}`" :navigator="[
-                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
             ]"/>
 
   <div class="grid justify-content-around">
     <div class="col-3" v-for="item in region_sectors" :key="item.id">
       <div class="card p-2">
-        <router-link :to="{name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: item.region.id}}"
+        <router-link :to="{name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: item.region.id}, query: $route.query}"
                      class="text-decoration-none speedometer-label">
           <speedometer :value="item.index" :label="item.region.name" :delta_index="item.delta_index"/>
         </router-link>
@@ -89,7 +89,7 @@ export default {
   async mounted() {
     await store.dispatch('fetch_sector', this.sector_id)
     await store.dispatch('fetch_sector_tables', {sector: this.sector_id, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`})
-    await store.dispatch('fetch_region_sectors', {sector: this.sector_id, file: 0, chart: false})
+    await store.dispatch('fetch_region_sectors', {sector: this.sector_id, file: new URL(window.location.href).searchParams.get('file'), chart: false})
     store.commit('basic', {key: 'loading', value: false})
   },
   methods: {

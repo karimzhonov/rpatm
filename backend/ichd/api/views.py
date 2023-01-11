@@ -52,7 +52,7 @@ class SectorTableView(ReadOnlyModelViewSet):
     filterset_class = SectorTableFilter
 
     def get_queryset(self):
-        return SectorTable.objects.filter(file__status='finished')
+        return SectorTable.objects.filter(file__status='finished').order_by('sector__number')
 
 
 class RegionTableView(ReadOnlyModelViewSet):

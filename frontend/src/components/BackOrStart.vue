@@ -8,7 +8,7 @@
       {{ header }}
     </h1>
     <div>
-      <router-link to="/">
+      <router-link :to="{name: 'home', query: $route.query}">
         <Button :label="$t('Перейти на главную страницу')"/>
       </router-link>
     </div>
@@ -21,7 +21,7 @@ export default {
   props: ['header', 'navigator'],
   data() {
     return {
-      home: {icon: 'pi pi-home', to: '/'},
+      home: {icon: 'pi pi-home', to: {name: 'home', query: this.$route.query}},
     }
   },
   methods: {

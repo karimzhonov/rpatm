@@ -118,6 +118,7 @@ class AreaAdmin(admin.ModelAdmin):
     ordering = ['name']
     list_display = ['name', 'region', 'sector']
     search_fields = ['name']
+    list_filter = ['region', 'sector']
 
 
 @admin.register(Criteria)

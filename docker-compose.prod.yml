@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+  ichd_web:
+    container_name: ichd_web
+    build: ./backend
+    ports:
+      - 8000:8000
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    restart: always
+    env_file:
+      - ./backend/.env
+
+  ichd_redis:
+    container_name: ichd_redis
+    image: redis:alpine
+
+  ichd_celery:
+    container_name: ichd_celery
+    build: ./backend/
+    command: celery -A backend worker -l info
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - ichd_redis
+
+  ichd_front:
+    container_name: ichd_front
+    build: ./frontend
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend/:/app/
+    command: npm run build

@@ -6,7 +6,7 @@ export default {
     lang: '',
     languages: [
         {
-          lang: 'Русскый', code: 'ru',
+          lang: 'Русский', code: 'ru',
         },
         {
           lang: 'Uzbekcha', code: 'uz'

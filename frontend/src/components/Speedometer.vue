@@ -3,7 +3,7 @@
     <div class="row justify-content-end">
       <div v-if="delta_index > 0" class="col-4 text-center" style="color: green">+{{ delta_index }}</div>
       <div v-if="delta_index < 0" class="col-4 text-center" style="color: red">{{ delta_index }}</div>
-      <div v-if="delta_index === 0" class="col-4 text-center">{{ delta_index }}</div>
+      <div v-if="delta_index === 0" class="col-4 text-center"></div>
     </div>
     <div class="text-center" style="font-size: 2rem">
       {{label}}
@@ -53,11 +53,7 @@ export default {
                 show: false
               },
               value: {
-                formatter: function (val) {
-                    let value = Math.round(val * 10) / 1000
-                    value = `${value}000000`
-                  return value.slice(0, 5);
-                },
+                formatter: this.format_value,
                 offsetY: -2,
                 fontSize: '22px'
               }
@@ -87,6 +83,11 @@ export default {
   },
   components: {VueApexCharts},
   methods: {
+  format_value(val) {
+    let value = Math.round(val * 10) / 1000
+        value = `${value}000000`
+      return value.slice(0, 5);
+    },
     rgbToHex(r, g, b) {
       return "#" + (1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1);
     },

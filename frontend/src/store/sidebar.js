@@ -1,3 +1,4 @@
+import {useRoute} from 'vue-router'
 
 export default {
     state: {
@@ -5,6 +6,7 @@ export default {
     },
     actions: {
         async fetch_sidebar(context) {
+        const route = useRoute()
             const menu = []
             const sector_menu = {
                 label: 'Сектора',
@@ -15,7 +17,7 @@ export default {
                 sector_menu.items.push(
                     {
                         label: `Сектор - ${sector.number}`,
-                        to: {name: 'sector_id_region', params: {sector_id: sector.id}},
+                        to: {name: 'sector_id_region', params: {sector_id: sector.id}, query: route.query},
                     }
                 )
             }
@@ -28,7 +30,7 @@ export default {
                 region_menu.items.push(
                     {
                         label: region.name,
-                        to: {name: 'region_id_sector', params: {region_id: region.id}}
+                        to: {name: 'region_id_sector', params: {region_id: region.id}, query: route.query}
                     }
                 )
             }

@@ -6,15 +6,15 @@
   </div>
   <div v-if="!loading">
   <BackOrStart :header="`${$t('Сектор')} - ${sector.number}`" :navigator="[
-                {label: region.name, to: {name: 'region_id_sector', params: {region_id: region_id}}},
-                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'region_id_sector_id', params: {region_id: region_id, sector_id: sector_id}}},
+                {label: region.name, to: {name: 'region_id_sector', params: {region_id: region_id}, query: $route.query}},
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'region_id_sector_id', params: {region_id: region_id, sector_id: sector_id}, query: $route.query}},
             ]"/>
 
   <div class="grid row justify-content-around">
     <div class="col-3" v-for="item in areas" :key="item">
       <div class="card p-2">
         <router-link
-            :to="{name: 'sector_id_region_id_area_id', params: {sector_id: 1, region_id: region_id, area_id: item.area.id}}"
+            :to="{name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: item.area.id}, query: $route.query}"
             class="text-decoration-none speedometer-label">
           <speedometer :value="item.index" :label="item.area.name" :delta_index="item.delta_index"/>
         </router-link>
@@ -100,7 +100,7 @@ export default {
     await store.dispatch('fetch_region', this.region_id)
     await store.dispatch('fetch_sector', this.sector_id)
     await store.dispatch('fetch_region_sectors', {region: this.region_id, chart: true, sector: this.sector_id, date_range: `${this.date_range[0].getFullYear()}-${this.date_range[1].getFullYear()}`, chart: 'line'})
-    await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false, file:0})
+    await store.dispatch('fetch_area_region_sector', {region: this.region_id, sector: this.sector_id, chart: false, file: new URL(window.location.href).searchParams.get('file')})
     store.commit('basic', {key: 'loading', value: false})
   },
   computed: {

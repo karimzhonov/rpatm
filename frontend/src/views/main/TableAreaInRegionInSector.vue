@@ -6,10 +6,10 @@
   </div>
   <div v-if="!loading">
     <BackOrStart :header="criteria.name" :navigator="[
-                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}}},
-                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}}},
-                {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}}},
-                {label: criteria.name, to: {name: 'sector_id_region_id_area_id_table_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id, criteria_id: criteria_id}}},
+                {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
+                {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}, query: $route.query}},
+                {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}, query: $route.query}},
+                {label: criteria.name, to: {name: 'sector_id_region_id_area_id_table_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id, criteria_id: criteria_id}, query: $route.query}},
             ]"/>
   <div class="grid row m-1 justify-content-around">
     <div class="card mt-3 rounded-4">

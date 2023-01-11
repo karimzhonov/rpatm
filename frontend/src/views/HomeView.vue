@@ -13,7 +13,7 @@
     <div class="grid row justify-content-around">
       <div class="col-3" v-for="item in sector_tables" :key="item.id">
         <div class="pb-2 guide-hover rounded-3">
-          <router-link :to="{name: 'sector_id_region', params: {sector_id: item.sector.id}}"
+          <router-link :to="{name: 'sector_id_region', params: {sector_id: item.sector.id}, query: $route.query}"
                        class="text-decoration-none speedometer-label">
             <speedometer :value="item.index" :label="`${$t('Сектор')} - ${item.sector.number }`" :delta_index="item.delta_index"/>
           </router-link>
@@ -68,9 +68,9 @@ export default {
   },
   async mounted() {
     await store.dispatch('fetch_sector_tables', {
-      file: 0
+      file: this.$route.query.file,
     })
-    await store.dispatch('fetch_region_tables', {file: 0, chart: 'bar'})
+    await store.dispatch('fetch_region_tables', {file: this.$route.query.file, chart: 'bar'})
     store.commit('basic', {key: 'loading', value: false})
   },
   methods: {
@@ -79,7 +79,7 @@ export default {
       await this.$router.push({
         name: 'region_id_sector', params: {
           region_id: region.id,
-        }
+        }, query: this.$route.query
       })
     },
   },

@@ -16,7 +16,7 @@ class CriteriaFilter(filters.FilterSet):
 
 
 class SectorTableFilter(filters.FilterSet):
-    sector = filters.BaseInFilter()
+    sector = filters.BaseInFilter(method='filter_sector')
     file = filters.BaseInFilter(method='filter_file')
     date_range = filters.CharFilter(method='filter_date_range')
 
@@ -24,10 +24,13 @@ class SectorTableFilter(filters.FilterSet):
         model = SectorTable
         fields = ['sector', 'file', 'date_range']
 
+    def filter_sector(self, queryset, name, value):
+        return queryset.filter(sector_id__in=value).order_by('file__date')
+
     def filter_file(self, queryset, name, value):
         if value == ['0']:
             return queryset.filter(file_id=Subquery(queryset.order_by('-file__date')[:1].values('file_id')))
-        return queryset.filter(file_id__in=value).order_by('file__date')
+        return queryset.filter(file_id__in=value).order_by('sector__number')
 
     def filter_date_range(self, queryset, name, value):
         from_at, to_at, *_ = value.split('-')
@@ -87,7 +90,7 @@ class AreaTableFilter(filters.FilterSet):
 
     class Meta:
         model = AreaTable
-        fields = ['area', 'file']
+        fields = ['area', 'file', 'sector', 'region']
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
@@ -106,10 +109,10 @@ class DataTableFilter(filters.FilterSet):
 
     class Meta:
         model = DataTable
-        fields = ['region', 'sector', 'area', 'file']
+        fields = ['region', 'sector', 'area', 'file', 'parent_criteria']
 
     def filter_parent_criteria(self, queryset, name, value):
-        return queryset.filter(criteria__parent_id__in=value).order_by('file__date')
+        return queryset.filter(criteria__parent_id__in=value).order_by('file__date', 'criteria__order')
 
 
 class UploadFilter(filters.FilterSet):
