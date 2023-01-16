@@ -4,13 +4,7 @@
 
 Проект запускается с помощью docker-compose:
 
-#### Production
-
     docker-compose --file docker-compose.prod.yml up --build -d
-
-#### Development
-
-    docker-compose up --build -d
 
 После запуска docker-compose backend части будеть крутиться 8000 порту
 
