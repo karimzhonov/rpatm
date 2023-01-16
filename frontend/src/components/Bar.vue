@@ -44,8 +44,13 @@ export default {
                     enabled: true,
                     offsetY: -20,
                     formatter: function (val, opts) {
-                        val = `${val}000000`
-                        return val.slice(0, 5);
+                        let val_array = `${val}`.split('.')
+                        if (val_array[1]) {
+                            val_array[1] = `${val_array[1]}000`
+                        } else {
+                            val_array[1] = '000'
+                        }
+                        return val_array.join('.').slice(0, 5);
                     },
                     style: {
                         fontSize: '14px',
