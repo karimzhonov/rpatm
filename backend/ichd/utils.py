@@ -1,5 +1,3 @@
-import re
-from decimal import Decimal
 from django.utils.formats import number_format
 
 

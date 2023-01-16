@@ -1,16 +1,14 @@
-import numpy as np
-from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
+from ichd.models import (Area, AreaTable, AreaTableCriteria, Criteria,
+                         DataTable, Region, RegionSectorTable,
+                         RegionSectorTableCriteria, RegionTable,
+                         RegionTableCriteria, Sector, SectorTable,
+                         SectorTableCriteria, Uploads)
 from ichd.utils import intspace
-from ichd.models import (
-    Uploads, Sector, Region, Area, Criteria,
-    SectorTable, RegionTable, RegionSectorTable, AreaTable,
-    DataTable, SectorTableCriteria, RegionSectorTableCriteria, AreaTableCriteria, RegionTableCriteria
-)
+from rest_framework import serializers
 
 
 class UploadSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Uploads
         fields = ('id', 'name', 'date')
@@ -61,7 +59,8 @@ class SectorTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(SectorTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: SectorTable):
-        return SectorTableCriteriaSerializer(obj.sectortablecriteria_set.all().order_by('criteria__order'), many=True, context=self.context).data
+        return SectorTableCriteriaSerializer(obj.sectortablecriteria_set.all().order_by('criteria__order'), many=True,
+                                             context=self.context).data
 
     @extend_schema_field(serializers.FloatField())
     def get_index(self, obj: SectorTable):
@@ -108,7 +107,6 @@ class RegionTableSerializer(serializers.ModelSerializer):
 class RegionSectorTableCriteriaSerializer(serializers.ModelSerializer):
     criteria = CriteriaSerializer()
 
-
     class Meta:
         model = RegionSectorTableCriteria
         fields = "__all__"
@@ -128,7 +126,8 @@ class RegionSectorTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(RegionSectorTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: RegionSectorTable):
-        return RegionSectorTableCriteriaSerializer(obj.regionsectortablecriteria_set.all().order_by('criteria__order'), many=True,
+        return RegionSectorTableCriteriaSerializer(obj.regionsectortablecriteria_set.all().order_by('criteria__order'),
+                                                   many=True,
                                                    context=self.context).data
 
     @extend_schema_field(serializers.FloatField())
@@ -202,7 +201,7 @@ class CityCriteriaTableSerializer(serializers.ModelSerializer):
         return float(str(obj['index'])[:5])
 
 
-#Chart
+# Chart
 class HomeSectorChartSerializer(serializers.ModelSerializer):
     sector = serializers.SerializerMethodField()
     bar = serializers.JSONField()
@@ -245,7 +244,7 @@ class PrimaryDataTableSerializer(serializers.ModelSerializer):
         model = Area
         fields = "__all__"
 
-    
+
 class RegionDataTableSerializer(serializers.ModelSerializer):
     data = serializers.ListSerializer(child=DataTableRowSerializer())
 

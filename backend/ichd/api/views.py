@@ -1,14 +1,20 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from django.db.models import Avg, F, Q
+from ichd.api.filters import (AreaTableFilter, CityCriteriaFilter,
+                              CriteriaFilter, DataTableFilter,
+                              RegionSectorTableFilter, RegionTableFilter,
+                              SectorTableFilter, UploadFilter)
+from ichd.api.serializers import (AreaSerializer, AreaTableSerializer,
+                                  CityCriteriaTableSerializer,
+                                  CriteriaSerializer, DataTableSerializer,
+                                  RegionSectorTableSerializer,
+                                  RegionSerializer, RegionTableSerializer,
+                                  SectorSerializer, SectorTableSerializer,
+                                  UploadSerializer)
+from ichd.models import (Area, AreaTable, AreaTableCriteria, Criteria,
+                         DataTable, Region, RegionSectorTable, RegionTable,
+                         Sector, SectorTable, Uploads)
 from rest_framework.response import Response
-from rest_framework.pagination import LimitOffsetPagination
-from ichd.api.filters import SectorTableFilter, RegionTableFilter, RegionSectorTableFilter, AreaTableFilter, \
-    DataTableFilter, CriteriaFilter, UploadFilter, CityCriteriaFilter
-from ichd.api.serializers import UploadSerializer, SectorSerializer, RegionSerializer, AreaSerializer, \
-    CriteriaSerializer, SectorTableSerializer, RegionTableSerializer, RegionSectorTableSerializer, AreaTableSerializer, \
-    DataTableSerializer, CityCriteriaTableSerializer
-from ichd.models import Uploads, Sector, Region, Area, Criteria, SectorTable, RegionTable, RegionSectorTable, AreaTable, \
-    DataTable, AreaTableCriteria
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 
 class UploadsView(ReadOnlyModelViewSet):

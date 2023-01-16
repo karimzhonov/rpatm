@@ -1,11 +1,13 @@
-from django.urls import path, include
+from django.urls import include, path
+from ichd.api.views import (AreaTableView, AreaView, CriteriaView,
+                            DataTableView, RegionSectorTableView,
+                            RegionTableView, RegionView, SectorTableView,
+                            SectorView, UploadsView)
 from rest_framework.routers import DefaultRouter
 
-from ichd.api.views import UploadsView, SectorView, RegionView, AreaView, CriteriaView, SectorTableView, \
-    RegionTableView, RegionSectorTableView, AreaTableView, DataTableView
-
-from .chart_views import (HomeSectorChartView, HomeCityDataView, SectorRegionBarChartView, PrimaryDataTableView, RegionDataView)
-
+from .chart_views import (HomeCityDataView, HomeSectorChartView,
+                          PrimaryDataTableView, RegionDataView,
+                          SectorRegionBarChartView)
 
 router = DefaultRouter()
 router.register('uploads', UploadsView, '')

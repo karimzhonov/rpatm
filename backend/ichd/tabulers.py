@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import (
-    SectorTableCriteria, AreaTableCriteria, RegionTableCriteria, RegionSectorTableCriteria,
-    SectorTable, RegionTable, RegionSectorTable, DataTable, AreaTable
-)
+
+from .models import (AreaTable, AreaTableCriteria, DataTable,
+                     RegionSectorTable, RegionSectorTableCriteria, RegionTable,
+                     RegionTableCriteria, SectorTable, SectorTableCriteria)
 
 
 class OnlyShowPermissionMixin:

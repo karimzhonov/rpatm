@@ -1,9 +1,10 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken
 
 User = get_user_model()
+
 
 class UserOutstandingToken(OutstandingToken):
     DEVICES_IDS = [

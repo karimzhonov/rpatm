@@ -1,6 +1,7 @@
 from django.contrib.admin import filters
 from django.utils.translation import gettext_lazy as _
-from .models import Criteria, Uploads, Region, Sector, Area
+
+from .models import Area, Criteria, Region, Sector, Uploads
 
 
 class CriteriaParentFilter(filters.SimpleListFilter):

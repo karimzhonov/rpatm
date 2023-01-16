@@ -1,7 +1,7 @@
-from rest_framework_simplejwt.tokens import RefreshToken as _RefreshToken
-from rest_framework_simplejwt.settings import api_settings
-from rest_framework_simplejwt.utils import datetime_from_epoch
 from oauth.models import UserOutstandingToken
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken as _RefreshToken
+from rest_framework_simplejwt.utils import datetime_from_epoch
 
 
 def get_client_ip(request):

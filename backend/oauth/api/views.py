@@ -1,6 +1,7 @@
 from rest_framework.generics import CreateAPIView
-from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenRefreshView
+
 from .serializers import AuthSerializer
 
 

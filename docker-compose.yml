@@ -9,12 +9,13 @@ services:
       - ./backend/.env
     volumes:
       - db:/var/lib/postgresql/data
+
   ichd_web:
     container_name: ichd_web
     build: ./backend
     ports:
       - 8000:8000
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "gunicorn -c gunicorn.py backend.wsgi"
     restart: always
     env_file:
       - ./backend/.env
@@ -26,6 +27,7 @@ services:
   ichd_redis:
     container_name: ichd_redis
     image: redis:alpine
+
   ichd_celery:
     container_name: ichd_celery
     build: ./backend/
@@ -38,6 +40,7 @@ services:
     depends_on:
       - ichd_db
       - ichd_redis
+
   ichd_front:
     container_name: ichd_front
     build: ./frontend

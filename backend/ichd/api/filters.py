@@ -1,6 +1,8 @@
 import django_filters.rest_framework as filters
 from django.db.models import Subquery
-from ichd.models import SectorTable, RegionTable, RegionSectorTable, AreaTable, DataTable, Criteria, Uploads, AreaTableCriteria, Area
+from ichd.models import (AreaTable, AreaTableCriteria, Criteria,
+                         DataTable, RegionSectorTable, RegionTable,
+                         SectorTable, Uploads)
 
 
 class CriteriaFilter(filters.FilterSet):
@@ -127,6 +129,7 @@ class DataTableFilter(filters.FilterSet):
         }
         l, g = ranges.get(value, (0, 0))
         return queryset.filter(index__gte=l, index__lt=g)
+
 
 class UploadFilter(filters.FilterSet):
     id = filters.BaseInFilter()

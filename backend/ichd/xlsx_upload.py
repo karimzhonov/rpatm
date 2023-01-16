@@ -1,6 +1,8 @@
 import io
+
 import numpy as np
 import pandas as pd
+
 from . import models
 
 
@@ -50,7 +52,6 @@ def parse_region_data(instance):
         )
         data.append(data_row)
     models.RegionDataTable.objects.bulk_create(data)
-
 
 
 def parse_sector(instance):

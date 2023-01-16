@@ -1,11 +1,11 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from rest_framework.exceptions import ValidationError
 from oauth.utils import RefreshToken
-
+from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 User = get_user_model()
+
 
 class AuthSerializer(serializers.Serializer):
     username = serializers.SlugField(write_only=True)
@@ -13,14 +13,13 @@ class AuthSerializer(serializers.Serializer):
     access = serializers.CharField(read_only=True)
     refresh = serializers.CharField(read_only=True)
 
-
     def _validate_from_username(self, attrs):
         try:
             user = self._get_user_from_username(attrs)
             if not user.check_password(attrs.get('password')):
                 raise ValidationError({'detail': _('Username или пароль не верно')})
         except User.DoesNotExist:
-            raise ValidationError({'detail':  _('Username или пароль не верно')})
+            raise ValidationError({'detail': _('Username или пароль не верно')})
         return attrs
 
     @staticmethod
@@ -37,6 +36,6 @@ class AuthSerializer(serializers.Serializer):
         user = self._get_user(validated_data)
         token = RefreshToken().for_user(user)
         return {
-                'access': str(token.access_token),
-                'refresh': str(token)
-            }
+            'access': str(token.access_token),
+            'refresh': str(token)
+        }

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+
 from .jazzmin_conf import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -144,15 +145,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Celery Configuration Options
 CELERY_TIMEZONE = 'Asia/Tashkent'
-# CELERY_TASK_TRACK_STARTED = True
-# CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_URL = "redis://ichd_redis:6379"
 CELERY_RESULT_BACKEND = "redis://ichd_redis:6379"
 # CELERY_BEAT_SCHEDULE = {
 #     'test_task': {
-#         'task': 'dwedAPI.v1_1.orders.tasks.cancel_orders',
+#         'task': 'ichd.tasks.cancel_orders',
 #         'schedule': crontab(hour=4, minute=0)},
-#
 # }
 
 if not DEBUG:

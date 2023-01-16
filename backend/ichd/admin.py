@@ -1,22 +1,22 @@
 import copy
-from django.contrib import admin
-from django.contrib import messages
-from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy as _
+
 from celery import shared_task
+from django.contrib import admin, messages
+from django.contrib.admin.utils import NestedObjects, quote
 from django.db import router
 from django.urls import NoReverseMatch, reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.text import capfirst
-from django.contrib.admin.utils import NestedObjects, quote
-from .admin_filters import CriteriaParentFilter, SectorFilter, RegionFilter, AreaFilter, \
-    ModelCriteriaParentFilter
-from .models import (
-    Region, Sector, Uploads,
-    Area, Criteria, RegionTable,
-    SectorTable, RegionSectorTable, AreaTable, DataTable, RegionDataTable
-)
+from django.utils.translation import gettext_lazy as _
+
 from . import tabulers, xlsx_upload
+from .admin_filters import (AreaFilter, CriteriaParentFilter,
+                            ModelCriteriaParentFilter, RegionFilter,
+                            SectorFilter)
+from .models import (Area, AreaTable, Criteria, DataTable, Region,
+                     RegionDataTable, RegionSectorTable, RegionTable, Sector,
+                     SectorTable, Uploads)
 
 
 @admin.register(Uploads)
