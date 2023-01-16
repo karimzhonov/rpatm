@@ -3,7 +3,7 @@ import { toRefs, reactive, computed } from 'vue';
 const contextPath = process.env.VUE_APP_BASE_URL;
 const layoutConfig = reactive({
     ripple: false,
-    darkTheme: false,
+    darkTheme: localStorage.getItem('dark'),
     inputStyle: 'outlined',
     menuMode: 'static',
     theme: 'lara-light-indigo',

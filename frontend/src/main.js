@@ -9,6 +9,7 @@ import "@/assets/styles.scss"
 import "bootstrap/dist/css/bootstrap.min.css"
 import locale from "@/locale";
 
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import AutoComplete from 'primevue/autocomplete';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
@@ -108,8 +109,13 @@ import VirtualScroller from 'primevue/virtualscroller';
 
 import CodeHighlight from '@/components/CodeHighlight.vue';
 import BlockViewer from '@/components/BlockViewer.vue';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faKitMedical, faPerson, faBriefcase, faGraduationCap, faWallet, faHandsHoldingChild, faShieldHalved ,
+faBuildingWheat, faChartLine} from '@fortawesome/free-solid-svg-icons'
+import {faFaceSmile, faFaceFrown, faFaceMeh} from "@fortawesome/free-regular-svg-icons"
+library.add(faKitMedical, faPerson, faBriefcase, faGraduationCap, faWallet, faHandsHoldingChild, faShieldHalved, faBuildingWheat, faChartLine, faFaceSmile, faFaceFrown, faFaceMeh)
 
-const app = createApp(App);
+export const app = createApp(App);
 
 const i18n = createI18n({
   legacy: false,
@@ -137,7 +143,7 @@ app.directive('styleclass', StyleClass);
 
 app.component('CodeHighlight', CodeHighlight);
 app.component('BlockViewer', BlockViewer);
-
+app.component('font-awesome-icon', FontAwesomeIcon)
 app.component('Accordion', Accordion);
 app.component('AccordionTab', AccordionTab);
 app.component('AutoComplete', AutoComplete);

@@ -29,6 +29,30 @@ def parse_data(instance):
     models.DataTable.objects.bulk_create(data)
 
 
+def parse_region_data(instance):
+    xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'region_data', engine='openpyxl')
+    data = []
+    for row in xlsx.iloc:
+        region, _ = models.Region.objects.get_or_create(name=row['region'])
+        if not pd.isna(row['parent']):
+            parent_criteria, _ = models.Criteria.objects.get_or_create(name=row['parent'])
+        else:
+            parent_criteria = None
+        criteria, _ = models.Criteria.objects.get_or_create(name=row['type'], parent=parent_criteria)
+        index = np.round(row["index"] * 1000) / 1000
+        # if not pd.isna(row['index_delta']):
+        #     delta_index = np.round(row['index_delta'] * 1000) / 1000
+        # else:
+        #     delta_index = None
+        data_row = models.RegionDataTable(
+            region_id=region.id, file_id=instance.id,
+            criteria_id=criteria.id, index=index, index_delta=None,
+        )
+        data.append(data_row)
+    models.RegionDataTable.objects.bulk_create(data)
+
+
+
 def parse_sector(instance):
     ignore_columns = ['Ўрин', 'Сектор', 'Ўрин ўзгариш']
     xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'sector', engine='openpyxl')

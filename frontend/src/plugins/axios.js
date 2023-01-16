@@ -1,5 +1,7 @@
 import axios from "axios";
 import store from "@/store";
+import router from "@/router";
+import { computed } from "vue";
 
 const $api = axios.create({
     baseURL: process.env.VUE_APP_BACKEND_HOST,
@@ -8,10 +10,14 @@ const $api = axios.create({
 export default {
     $api,
     async raise_error_400(data) {
-        for (let message of data) {
-            if (message.field === 'message') {
-                await store.dispatch('add_message', message.message)
+        if (data.detail) {
+            for (let message of data.detail) {
+                await store.dispatch('add_error_message', message)
             }
+        }
+        delete data.detail
+        for (let key in data) {
+            document.getElementById(`${key}_error`).innerText = data[key].join('. ')
         }
     },
     async raise_error(response) {
@@ -20,18 +26,25 @@ export default {
                 await store.dispatch('refresh_token', localStorage.getItem('refresh'))
                 return
             }
-            window.location.replace(process.env.VUE_APP_PUBLIC_HOST)
+            await router.push({name: 'login'})
         } else if (response.status === 400) {
             await this.raise_error_400(response.data)
         }
         throw response.data
     },
+    async delete_errors(){
+        for (let element of document.querySelectorAll('[id$=_error]')) {
+            element.innerText = ''
+        }
+    },
     async get_headers() {
+        this.delete_errors()
         const headers = {}
         headers['Accept-Language'] = localStorage.getItem('lang') ?? 'ru'
-        // if (store.getters.get_token) {
-        //     headers['Authorization'] = `Bearer ${store.getters.get_token}`
-        // }
+        if (localStorage.getItem('access')) {
+            headers['Authorization'] = `Bearer ${localStorage.getItem('access')}`
+        }
+        headers['Accept-Language'] = localStorage.getItem('lang')
         return headers
     },
     async get(url, options = {}) {

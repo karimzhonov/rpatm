@@ -14,7 +14,7 @@ from .admin_filters import CriteriaParentFilter, SectorFilter, RegionFilter, Are
 from .models import (
     Region, Sector, Uploads,
     Area, Criteria, RegionTable,
-    SectorTable, RegionSectorTable, AreaTable, DataTable
+    SectorTable, RegionSectorTable, AreaTable, DataTable, RegionDataTable
 )
 from . import tabulers, xlsx_upload
 
@@ -42,13 +42,14 @@ class UploadsAdmin(admin.ModelAdmin):
         instance = Uploads.objects.get(id=instance_id)
         try:
             xlsx_upload.parse_data(copy.deepcopy(instance))
+            xlsx_upload.parse_region_data(copy.deepcopy(instance))
             xlsx_upload.parse_sector(copy.deepcopy(instance))
             xlsx_upload.parse_region(copy.deepcopy(instance))
             xlsx_upload.parse_region_sector(copy.deepcopy(instance))
             xlsx_upload.parse_area(copy.deepcopy(instance))
             instance.set_finished()
         except Exception as _exp:
-            instance.set_error()
+            instance.set_error(str(_exp))
             raise _exp
 
     def get_deleted_objects(self, objs, request):
@@ -229,3 +230,10 @@ class DataTableAdmin(admin.ModelAdmin):
     list_display = ['criteria', 'index', 'index_delta', 'region', 'sector', 'area']
     list_display_links = ['criteria']
     list_filter = [ModelCriteriaParentFilter, RegionFilter, SectorFilter, AreaFilter, 'file']
+
+
+@admin.register(RegionDataTable)
+class RegionDataTableAdmin(admin.ModelAdmin):
+    list_display = ['criteria', 'index', 'index_delta', 'region']
+    list_display_links = ['criteria']
+    list_filter = [ModelCriteriaParentFilter, RegionFilter, 'file']

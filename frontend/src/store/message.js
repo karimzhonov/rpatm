@@ -1,15 +1,25 @@
 export default {
-    state: {messages: [],},
+    state: {
+        messages: [],
+        message_icon_list: {
+            1: 'pi pi-times-circle',
+            2: 'pi pi-info-circle',
+            3: 'pi pi-exclamation-triangle',
+            4: 'pi pi-check'
+        }
+    },
     actions: {
+        async add_error_message(context, message) {
+            context.commit('append_message', {
+                severity: 'error',
+                closable: true,
+                icon: context.state.message_icon_list[1],
+                content: message
+            })
+        },
         async _add_message(context, message) {
             const type_list = {
                 1: 'error', 2: 'info', 3: 'warn', 4: 'success'
-            }
-            const icon_list = {
-                1: 'pi pi-times-circle',
-                2: 'pi pi-info-circle',
-                3: 'pi pi-exclamation-triangle',
-                4: 'pi pi-check'
             }
             context.commit('append_message', {
                 severity: type_list[message.type],

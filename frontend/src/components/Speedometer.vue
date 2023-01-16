@@ -1,87 +1,38 @@
 <template>
-  <div>
-    <div class="row justify-content-end">
-      <div v-if="delta_index > 0" class="col-4 text-center" style="color: green">+{{ delta_index }}</div>
-      <div v-if="delta_index < 0" class="col-4 text-center" style="color: red">{{ delta_index }}</div>
-      <div v-if="delta_index === 0" class="col-4 text-center"></div>
+    <div class="row justify-content-end" style="color: var(--surface-900)!important;">
+      <div v-if="delta_index > 0" class="col-4 p-0 text-center" style="color: green">+{{ delta_index }}</div>
+      <div v-if="delta_index < 0" class="col-4 p-0 text-center" style="color: red">{{ delta_index }}</div>
+      <div v-if="delta_index === 0" class="col-4 p-0 text-center"></div>
     </div>
-    <div class="text-center" style="font-size: 2rem">
+    <h4 class="text-center pb-3" style="font-size: 2rem">
       {{label}}
-    </div>
-    <vue-apex-charts type="radialBar" :options="chartOptions" :series="series"/>
-  </div>
+    </h4>
+    <vue-gauge :refid="`a-${get_random_str()}`" :options="guageOptions"></vue-gauge>
+    <p class="text-center position-relative" style="top: -50px; font-size: 1.5rem; color: var(--surface-900)!important;">{{ format_value(value * 100) }}</p>
 </template>
 
 <script>
-import VueApexCharts from "vue3-apexcharts";
+import VueGauge from 'vue-gauge';
 
 export default {
   name: "Speedometer",
-  props: ['value', 'label', 'delta_index'],
+  props: ['value', 'label', 'delta_index', 'id'],
   data() {
     return {
-      series: [this.value * 100],
-      chartOptions: {
-        chart: {
-          type: 'radialBar',
-          offsetY: -20,
-          sparkline: {
-            enabled: true
-          },
-        },
-        colors: [this.rgbToHex(...this.get_color())],
-        plotOptions: {
-          radialBar: {
-            startAngle: -90,
-            endAngle: 90,
-            maxValue: 1,
-            track: {
-              background: "#e7e7e7",
-              strokeWidth: '97%',
-              margin: 5, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: 2,
-                left: 0,
-                color: '#999',
-                opacity: 1,
-                blur: 2
-              }
-            },
-            dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                formatter: this.format_value,
-                offsetY: -2,
-                fontSize: '22px'
-              }
-            }
-          }
-        },
-        grid: {
-          padding: {
-            top: -10
-          }
-        },
-
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shade: 'light',
-            shadeIntensity: 0.4,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 53, 91]
-          },
-        },
-        labels: ['Average Results'],
-      },
+      guageOptions: {
+        needleValue: this.value * 100,
+        arcColors: ["#EE391F", "#F45318", "#F77612", "#F9920D", "#FBAC09", "#FAB807", "#F6E200", "#F1E000", "#A4D12A", "#27B973"],
+        arcLabels: ["0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1"],
+        arcDelimiters:[10,20, 30, 40, 50, 60, 70, 80, 90],
+        hasNeedle: true,
+        rangeLabel: ['0', '1.0'],
+        needleColor: "#000000",
+        chartWidth: 330,
+        needleColor: 'var(--surface-900)'
+      }
     }
   },
-  components: {VueApexCharts},
+  components: {VueGauge},
   methods: {
   format_value(val) {
     let value = Math.round(val * 10) / 1000
@@ -253,6 +204,15 @@ export default {
         }
       }
     },
+    get_random_str() {
+      let result           = '';
+      let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let charactersLength = characters.length;
+      for ( let i = 0; i < 7; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
   }
 }
 </script>

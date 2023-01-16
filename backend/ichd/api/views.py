@@ -1,11 +1,14 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from django.db.models import Avg, F, Q
+from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 from ichd.api.filters import SectorTableFilter, RegionTableFilter, RegionSectorTableFilter, AreaTableFilter, \
-    DataTableFilter, CriteriaFilter, UploadFilter
+    DataTableFilter, CriteriaFilter, UploadFilter, CityCriteriaFilter
 from ichd.api.serializers import UploadSerializer, SectorSerializer, RegionSerializer, AreaSerializer, \
     CriteriaSerializer, SectorTableSerializer, RegionTableSerializer, RegionSectorTableSerializer, AreaTableSerializer, \
-    DataTableSerializer
+    DataTableSerializer, CityCriteriaTableSerializer
 from ichd.models import Uploads, Sector, Region, Area, Criteria, SectorTable, RegionTable, RegionSectorTable, AreaTable, \
-    DataTable
+    DataTable, AreaTableCriteria
 
 
 class UploadsView(ReadOnlyModelViewSet):
@@ -44,7 +47,7 @@ class CriteriaView(ReadOnlyModelViewSet):
     search_fields = ['name']
 
     def get_queryset(self):
-        return Criteria.objects.all().order_by('order')
+        return Criteria.objects.all().order_by('order', 'name')
 
 
 class SectorTableView(ReadOnlyModelViewSet):
@@ -86,3 +89,17 @@ class DataTableView(ReadOnlyModelViewSet):
     def get_queryset(self):
         return DataTable.objects.filter(file__status='finished').order_by('criteria__order')
 
+
+class CityCriteriaTableView(ReadOnlyModelViewSet):
+    serializer_class = CityCriteriaTableSerializer
+    filterset_class = CityCriteriaFilter
+
+    def get_queryset(self):
+        return AreaTableCriteria.objects.filter(table__file__status='finished')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.values('criteria').annotate(
+            index=Avg('index', filter=Q(criteria_id=F('criteria')))).order_by('criteria__order')
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

@@ -69,6 +69,7 @@ class Uploads(models.Model):
     status = models.CharField(max_length=100, default='progres', choices=STATUS)
     create_date = models.DateTimeField(auto_now_add=True)
     finish_date = models.DateTimeField(blank=True, null=True)
+    message = models.TextField(editable=False, blank=True, null=True)
 
     class Meta:
         verbose_name = _('Upload')
@@ -89,8 +90,9 @@ class Uploads(models.Model):
         self.finish_date = None
         self.save()
 
-    def set_error(self):
+    def set_error(self, text=None):
         self.status = 'error'
+        self.message = text
         self.save()
 
 
@@ -197,6 +199,21 @@ class AreaTableCriteria(models.Model):
         verbose_name = _('Area Table Criteria')
         verbose_name_plural = _('Area Table Criteria')
         ordering = ['criteria__order', 'criteria__name']
+
+
+class RegionDataTable(models.Model):
+    region = models.ForeignKey(Region, models.PROTECT)
+    file = models.ForeignKey(Uploads, models.CASCADE)
+    index = models.FloatField()
+    index_delta = models.FloatField(blank=True, null=True)
+    criteria = models.ForeignKey(Criteria, models.PROTECT)
+
+    def __str__(self):
+        return f'{self.region} ({self.sector}), {self.area} {self.index} ({self.index_delta}) - {self.criteria}'
+
+    class Meta:
+        verbose_name = _('Region Data Table')
+        verbose_name_plural = _('Region Data Tables')
 
 
 class DataTable(models.Model):

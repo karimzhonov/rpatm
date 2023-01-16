@@ -1,6 +1,3 @@
-import locale from "@/locale";
-import {useI18n} from "vue-i18n";
-
 export default {
   state: {
     lang: '',
@@ -10,6 +7,9 @@ export default {
         },
         {
           lang: 'Uzbekcha', code: 'uz'
+        },
+        {
+          lang: 'Узбекча', code: 'uz-cl'
         }
       ],
   },

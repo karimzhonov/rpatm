@@ -3,14 +3,21 @@ import locale from "@/store/locale";
 import auth from "@/store/auth";
 import message from "@/store/message";
 import sidebar from "@/store/sidebar";
-import sector from "@/store/sector";
-import region from "@/store/region";
-import criteria from "@/store/criteria";
-import area from "@/store/area"
+import sector from "@/store/ichd/sector";
+import region from "@/store/ichd/region";
+import criteria from "@/store/ichd/criteria";
+import area from "@/store/ichd/area"
+import ichd_home from "./ichd/home"
 import axios from "@/plugins/axios";
 
 export default createStore({
-    state: {files: [], data: [], selectedFiles: [], loading: true, selected_year: {}, top_bar_years: [], selected_file: {}},
+    state: {
+        files: [], data: [], selectedFiles: [], loading: true, 
+        selected_year: {}, top_bar_years: [], selected_file: {}, city_criteria: [],
+        data_table: [],
+        darkMode: false,
+        messages: [],
+    },
     getters: {},
     mutations: {
         basic(state, {key, value}) {
@@ -27,6 +34,11 @@ export default createStore({
         async fetch_main_data(context, params) {
             const data = await axios.get('/api/ichd/data-table/', {params})
             context.commit('add_main_data', data.data)
+            return data.data
+        },
+        async fetch_data_table(context, params) {
+            const data = await axios.get('/api/ichd/data-table/', {params})
+            context.commit('basic', {key: 'data_table', value: data.data})
             return data.data
         },
         async fetch_upload_files(context, params = {}) {
@@ -72,9 +84,15 @@ export default createStore({
             context.commit('basic', {key: 'selected_file', value: selected_file})
 
             return Object.values(years)
-        }
+        },
+        async fetch_city_table_criteria(context, params={}) {
+            const data = await axios.get('/api/ichd/city-criteria-table/', {params})
+            context.commit('basic', {key: 'city_criteria', value: data.data})
+            return data.data
+        },
     },
     modules: {
+        ichd_home,
         locale,
         auth,
         message,

@@ -1,6 +1,7 @@
+import numpy as np
 from rest_framework import serializers
 from drf_spectacular.utils import extend_schema_field
-
+from ichd.utils import intspace
 from ichd.models import (
     Uploads, Sector, Region, Area, Criteria,
     SectorTable, RegionTable, RegionSectorTable, AreaTable,
@@ -13,22 +14,6 @@ class UploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Uploads
         fields = ('id', 'name', 'date')
-
-    # def get_data(self, obj: Uploads):
-    #     request = self.context['request']
-    #     sector = request.query_params.get('sector', '').split(',')
-    #     region = request.query_params.get('region', '').split(',')
-    #     area = request.query_params.get('area', '').split(',')
-    #     filter_kwargs = {}
-    #     if not sector == ['']:
-    #         filter_kwargs['sector_id__in'] = sector
-    #     if not region == ['']:
-    #         filter_kwargs['region_id__in'] = region
-    #     if not area == ['']:
-    #         filter_kwargs['area_id__in'] = area
-    #     if len(filter_kwargs) > 0:
-    #         return DataTableSerializer(obj.datatable_set.filter(**filter_kwargs), many=True, context=self.context).data
-    #     return []
 
 
 class SectorSerializer(serializers.ModelSerializer):
@@ -200,3 +185,70 @@ class DataTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataTable
         exclude = ['index_delta']
+
+
+class CityCriteriaTableSerializer(serializers.ModelSerializer):
+    criteria = serializers.SerializerMethodField()
+    index = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AreaTableCriteria
+        fields = ['criteria', 'index']
+
+    def get_criteria(self, obj: AreaTableCriteria):
+        return CriteriaSerializer(Criteria.objects.get(id=obj['criteria'])).data
+
+    def get_index(self, obj):
+        return float(str(obj['index'])[:5])
+
+
+#Chart
+class HomeSectorChartSerializer(serializers.ModelSerializer):
+    sector = serializers.SerializerMethodField()
+    bar = serializers.JSONField()
+    index = serializers.FloatField()
+    delta_index = serializers.FloatField()
+    area_info = serializers.JSONField()
+
+    class Meta:
+        model = SectorTable
+        fields = ['bar', 'sector', 'index', 'delta_index', 'area_info']
+
+    def get_sector(self, obj):
+        return SectorSerializer(Sector.objects.get(id=obj['sector'])).data
+
+
+class SectorRegionBarChartSerializer(serializers.ModelSerializer):
+    labels = serializers.ListField()
+    datasets = serializers.JSONField()
+    region = RegionSerializer()
+    sector = SectorSerializer()
+    file = UploadSerializer()
+
+    class Meta:
+        model = RegionSectorTable
+        fields = '__all__'
+
+
+class DataTableRowSerializer(serializers.Serializer):
+    criteria_name = serializers.CharField()
+    index = serializers.SerializerMethodField()
+
+    def get_index(self, obj):
+        return intspace(obj['index'], )
+
+
+class PrimaryDataTableSerializer(serializers.ModelSerializer):
+    data = serializers.ListSerializer(child=DataTableRowSerializer())
+
+    class Meta:
+        model = Area
+        fields = "__all__"
+
+    
+class RegionDataTableSerializer(serializers.ModelSerializer):
+    data = serializers.ListSerializer(child=DataTableRowSerializer())
+
+    class Meta:
+        model = Region
+        fields = "__all__"
