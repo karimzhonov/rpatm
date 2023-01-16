@@ -25,7 +25,7 @@
         }
     
         location  /api/ {
-            proxy_pass http://backend:8000/api/;
+            proxy_pass http://backend/api/;
             
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
@@ -40,7 +40,7 @@
         }
         
         location  /admin/ {
-            proxy_pass http://backend:8000/admin/;
+            proxy_pass http://backend/admin/;
             
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
