@@ -18,7 +18,7 @@
     <div class="col-12 row p-0">
         <div class="col-3">
             <router-link :to="{name: 'ichd_region', query: {year: $route.query.year, file: $route.query.file}}">
-            <div class="card rounded-4" style="padding: 16px" v-tooltip.top="{value: `Нажмите что бы увидеть по районам`, escape: true, class: 'text-center'}">
+            <div class="card rounded-4" style="padding: 16px" v-tooltip.top="{value: $t(`Нажмите что бы увидеть по районам`), escape: true, class: 'text-center'}">
                 <div class="row" style="text-align: center;">
                     <div class="col">
                         <div class="col p-0 text-900 font-medium" style="font-size: 2.5rem">{{home_city_data.criteria[0].index}}</div>
@@ -101,13 +101,13 @@
 
         
     </div>
-<h1 class="m-3 text-center">{{ $t('Показатели по секторам') }}</h1>
+<h1 class="m-3 text-center pb-3">{{ $t('Показатели по секторам') }}</h1>
 
   <div class="grid row justify-content-between">
     <div class="col-12 row pb-0 justify-content-between" v-for="sector in home_sectors_data" :key="sector">
         <div class="col-3 row pt-0">
             <div class="grid row justify-content-around">
-                <div class="col-12 card rounded-4 p-0">
+                <div class="col-12 card rounded-4 p-0 mb-1">
                     <div class="pb-2 rounded-3 pt-4">
                         <router-link :to="{name: 'sector_id_region', params: {sector_id: sector.sector.id}, query: $route.query}"
                                     class="text-decoration-none speedometer-label">
@@ -116,7 +116,7 @@
                     </div>
                 </div>
                 <router-link class="p-0" :to="{name: 'ichd_data_table', query: {file: $route.query.file, year: $route.query.year, index_color:'red', sector: sector.sector.id}}">
-                <div class="card p-3 col-12 rounded-4 pb-0">
+                <div class="card p-2 col-12 rounded-4 pb-0">
                     <div style="text-align: center;">
                         <div class="row justify-content-center mb-1 pr-3 pl-3 align-items-center">
                             <div class="col p-0 text-900 font-medium text-xl">
@@ -131,7 +131,7 @@
                 </div>
             </router-link>
                 <router-link class="p-0" :to="{name: 'ichd_data_table', query: {file: $route.query.file, year: $route.query.year,  index_color:'blue', sector: sector.sector.id}}">
-                <div class="card p-3 col-12 rounded-4">
+                <div class="card p-2 col-12 rounded-4">
                     <div style="text-align: center;">
                         <div class="row justify-content-center mb-1 pr-3 pl-3 align-items-center">
                             <div class="col p-0 text-900 font-medium text-xl">
@@ -146,7 +146,7 @@
                 </div>
             </router-link>
                 <router-link class="p-0" :to="{name: 'ichd_data_table', query: {file: $route.query.file, year: $route.query.year, index_color:'green', sector: sector.sector.id}}">
-                <div class="card p-3 col-12 rounded-4">
+                <div class="card p-2 col-12 rounded-4">
                     <div style="text-align: center;">
                         <div class="row justify-content-center mb-1 pr-3 pl-3 align-items-center">
                             <div class="col p-0 text-900 font-medium text-xl">
@@ -163,10 +163,10 @@
             </div>
         </div>
 
-        <div class="col-9 pl-0 pb-0 pr-0">
+        <div class="col-9 pl-0 pb-0 pr-0 pt-1">
             <div class="grid">
                 <div class="col-12 row pt-0 pl-0 pr-0">
-                    <div class="col-12 mb-0 card rounded-4">
+                    <div class="col-12 mb-0 card rounded-4 mb-2">
                         <Bar :series="sector.bar.datasets" :labels="sector.bar.labels" @dataPointSelection="async (e, chart, config) => await bar_selected(sector.bar.labels[config.dataPointIndex], sector.sector.id)"/>
                     </div>
                 </div>
