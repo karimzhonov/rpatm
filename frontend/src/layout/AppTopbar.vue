@@ -30,9 +30,10 @@ export default {
     store.commit('select_lang', {lang: user_lang || 'uz-cl', i18n: this.$i18n})
     store.dispatch('fetch_top_bar_files')
 
-    if (!localStorage.getItem('dark') === null) {
+    if (localStorage.getItem('dark') === null) {
       localStorage.setItem('dark', false)
     }
+    this.darkMode = localStorage.getItem('dark')
   },
   beforeUnmount() {
     this.unbindOutsideClickListener();
@@ -170,7 +171,7 @@ export default {
                 optionValue="code" :model-value="selected_lang"
                 @change="language_change" inputStyle="padding: 1rem"
       />
-      <ToggleButton class="ml-3 mr-3" v-model="mode_chack" onIcon="pi pi-moon" offIcon="pi pi-sun" :onLabel="$t('Темный режим')" :off-label="$t('Светлый режим')" @change="onChangeTheme"/>
+      <ToggleButton class="ml-3 mr-3" v-model="mode_chack" onIcon="pi pi-moon" offIcon="pi pi-sun" :onLabel="$t('')" :off-label="$t('')" @change="onChangeTheme"/>
       <button @click="onNavbarLogoutButton()" class="p-link layout-topbar-button m-auto">
         <i class="pi pi-sign-out"></i>
         <span>{{ $t("Выйти") }}</span>

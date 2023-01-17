@@ -5,9 +5,9 @@ export default {
         {
           lang: 'Русский', code: 'ru',
         },
-        {
-          lang: 'Uzbekcha', code: 'uz'
-        },
+        // {
+        //   lang: 'Uzbekcha', code: 'uz'
+        // },
         {
           lang: 'Узбекча', code: 'uz-cl'
         }
