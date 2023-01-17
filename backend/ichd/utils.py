@@ -11,3 +11,16 @@ def intspace(value, use_l10n=True):
         v, _v = value_str.split(',')
         return ','.join([v, _v[:1]])
     return value_str
+
+
+class OnlyShowPermissionMixin:
+    show_change_link = True
+
+    def has_add_permission(self, request, obj):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

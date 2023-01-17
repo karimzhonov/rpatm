@@ -66,7 +66,7 @@ const login = async () => {
                                 <label for="rememberme1">{{ $t('Запомнить') }}</label>
                             </div>
                         </div> -->
-                        <Button type="submit" label="Sign In" class="w-full p-3 text-xl" @click="login"></Button>
+                        <Button type="submit" :label="$t('Войти')" class="w-full p-3 text-xl" @click="login"></Button>
                     </form>
                 </div>
             </div>

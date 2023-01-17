@@ -1,21 +1,8 @@
 from django.contrib import admin
-
+from .utils import OnlyShowPermissionMixin
 from .models import (AreaTable, AreaTableCriteria, DataTable,
                      RegionSectorTable, RegionSectorTableCriteria, RegionTable,
                      RegionTableCriteria, SectorTable, SectorTableCriteria)
-
-
-class OnlyShowPermissionMixin:
-    show_change_link = True
-
-    def has_add_permission(self, request, obj):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
-        return False
 
 
 class SectorTableTabularAdmin(OnlyShowPermissionMixin, admin.TabularInline):
