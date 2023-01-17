@@ -41,3 +41,33 @@
 
     docker exec -it ichd_web python manage.py createsuperuser
 
+## Изменить порт
+
+Изменить конфигурационный файл [gunicorn.py](./gunicorn.py)
+```python
+from multiprocessing import cpu_count
+
+bind = '0.0.0.0:<Указать порт>'
+timeouts = 60
+max_requests = 1000
+workers = cpu_count()
+
+reload = True
+name = 'ichd_web'
+```
+    
+Открыть порт в [docker-compose.prod.yml](../docker-compose.prod.yml)
+
+```yaml
+...
+ichd_web:
+ container_name: ichd_web
+ build: ./backend
+ ports:
+   - <Указать порт>:<Указать порт>
+ command: sh -c "gunicorn -c gunicorn.py backend.wsgi"
+ restart: always
+ env_file:
+   - ./backend/.env
+...
+```
