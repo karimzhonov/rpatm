@@ -12,8 +12,6 @@ class UserOutstandingToken(OutstandingToken):
         [1, "Android"],
         [2, "iOS"],
         [3, "Mobile WEB"],
-        [4, "DWED infomat"],
-        [5, "TMED"],
     ]
 
     device_id = models.IntegerField(choices=DEVICES_IDS, default=0)
