@@ -55,10 +55,10 @@
         }
     
         location /api/static/ {
-            alias /app/static/;
+            alias <Путь до папки backend/static/>;
         }
     
         location /api/media/ {
-            alias /app/media/;
+            alias <Путь до папки backend/media/>;
         }
     }
