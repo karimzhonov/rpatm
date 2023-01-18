@@ -20,6 +20,11 @@ export default {
             }
         }
 
+        const translate_labels = []
+        for (let label of this.labels) {
+            translate_labels.push(this.$t(label))
+        }
+
         return {
             chartOptions: {
                 chart: {
@@ -63,7 +68,7 @@ export default {
                     show: false
                 },
             xaxis: {
-                categories: this.labels,
+                categories: translate_labels,
                 labels: {
                     style: {
                         fontSize: '14px',

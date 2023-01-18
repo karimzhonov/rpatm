@@ -126,6 +126,11 @@ const i18n = createI18n({
 
 router.afterEach(to => {
   store.commit('basic', {key: 'loading', value: true})
+  setTimeout(() => {
+    if (store.state.loading) {
+      store.commit('basic', {key: 'loading', value: false})
+    }
+  }, 4000)
 })
 
 app.use(store)

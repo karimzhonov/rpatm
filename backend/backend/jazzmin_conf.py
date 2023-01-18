@@ -76,7 +76,10 @@ JAZZMIN_SETTINGS = {
         "auth.Group", "auth.User",
         "ichd.Uploads",
         "ichd.Sector", 'ichd.Region', "ichd.Area", "ichd.Criteria",
-        "ichd.SectorTable", "ichd.RegionTable", "ichd.RegionSectorTable", "ichd.AreaTable", "ichd.DataTable"
+        "ichd.SectorTable", "ichd.RegionTable", "ichd.RegionSectorTable", 
+        "ichd.AreaTable", "ichd.DataTable", "ichd.RegionDataTable",
+        "passport_indicators.Uploads", "passport_indicators.Region",
+        "passport_indicators.Criteria", "passport_indicators.DataTable",
     ],
 
     # Custom links to append to app groups, keyed on app name

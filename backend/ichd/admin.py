@@ -29,12 +29,13 @@ class UploadsAdmin(admin.ModelAdmin):
     ]
     list_filter = ['status', 'date']
     search_fields = ['name']
+    actions = ['ichd_data_upload']
 
-    def response_post_save_add(self, request, obj):
-        response = super().response_post_save_add(request, obj)
+    @admin.action(description='Upload xlsx')
+    def ichd_data_upload(modeladmin, request, queryset):
+        for obj in queryset:
+            modeladmin.upload_xlsx_database.delay(obj.id)
         messages.add_message(request, messages.INFO, 'Upload xlsx started')
-        self.upload_xlsx_database.delay(obj.id)
-        return response
 
     @staticmethod
     @shared_task

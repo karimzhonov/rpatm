@@ -8,6 +8,7 @@ import region from "@/store/ichd/region";
 import criteria from "@/store/ichd/criteria";
 import area from "@/store/ichd/area"
 import ichd_home from "./ichd/home"
+import passport from "./passport_indicators"
 import axios from "@/plugins/axios";
 
 export default createStore({
@@ -17,6 +18,7 @@ export default createStore({
         data_table: [],
         darkMode: false,
         messages: [],
+        loading: true, 
     },
     getters: {},
     mutations: {
@@ -101,5 +103,6 @@ export default createStore({
         region,
         criteria,
         area,
+        passport,
     },
 });

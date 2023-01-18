@@ -100,7 +100,7 @@ class HomeCityDataView(ViewSet):
 
         return Response({
             "criteria": CityCriteriaTableSerializer(
-                AreaTableCriteria.objects.filter(table__file__status='finished', **kwargs).values('criteria').annotate(
+                AreaTableCriteria.objects.filter(table__file__status='finished', **kwargs).order_by('criteria__order', 'criteria__name').values('criteria').annotate(
                     index=Avg('index', filter=Q(criteria_id=F('criteria')))).order_by('criteria__order'),
                 many=True).data,
             "area_info": {

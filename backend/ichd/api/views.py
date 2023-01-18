@@ -20,6 +20,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 class UploadsView(ReadOnlyModelViewSet):
     serializer_class = UploadSerializer
     filterset_class = UploadFilter
+    authentication_classes = ()
+    permission_classes = ()
 
     def get_queryset(self):
         return Uploads.objects.filter(status='finished')

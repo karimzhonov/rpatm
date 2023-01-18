@@ -24,7 +24,7 @@
                         </Column>
                         <Column v-for="(col, i) in criteriaes" :key="i" :field="col.name">
                           <template #header>
-                            <p class="text-center m-auto" style="font-size: 1.3rem">{{ col.name }}</p>
+                            <p class="text-center m-auto" style="font-size: 1.3rem">{{ $t(col.name) }}</p>
                           </template>
                         <template #body="slotProps">
                             <p class="text-center" style="font-size: 1.5rem">

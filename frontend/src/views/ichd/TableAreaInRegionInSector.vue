@@ -5,7 +5,7 @@
                 </div>
   </div>
   <div v-if="!loading">
-    <BackOrStart :header="criteria.name" :navigator="[
+    <BackOrStart :header="$t(criteria.name)" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
                 {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id}, query: $route.query}},
                 {label: area.name, to: {name: 'sector_id_region_id_area_id', params: {sector_id: sector_id, region_id: region_id, area_id: area_id}, query: $route.query}},
@@ -32,7 +32,7 @@
                     <div>{{ slotProps.data[0].file.name }}</div>
                   </template>
                 </Column>
-                <Column v-for="(col, i) in criteriaes" :key="i" :field="col.name" :header="col.name">
+                <Column v-for="(col, i) in criteriaes" :key="i" :field="col.name" :header="$t(col.name)">
                   <template #body="slotProps">
                     <div>{{ slotProps.data[i].index }}</div>
                   </template>

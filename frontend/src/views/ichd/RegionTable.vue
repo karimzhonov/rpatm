@@ -5,7 +5,7 @@
                     </div>
       </div>
       <div v-if="!loading">
-        <BackOrStart :header="`${$t('Районы')} (${criteria.name})`" :navigator="[]"/>
+        <BackOrStart :header="`${$t('Районы')} (${$t(criteria.name)})`" :navigator="[]"/>
         <div class="card mt-3 rounded-4">
           <div class="col-12">
             <div class="row">
@@ -22,7 +22,7 @@
                         </Column>
                         <Column v-for="(col, i) in criteriaes" :key="i" :field="col.name">
                           <template #header>
-                            <p class="text-center m-auto" style="font-size: 1.3rem">{{ col.name }}</p>
+                            <p class="text-center m-auto" style="font-size: 1.3rem">{{ $t(col.name) }}</p>
                           </template>
                         <template #body="slotProps">
                           <p class="text-center cursor-pointer" style="font-size: 1.5rem" @click="async () => await row_click(slotProps.data.id)">

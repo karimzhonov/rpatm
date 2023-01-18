@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("i18n/", include('django.conf.urls.i18n')),
     path("api/ichd/", include('ichd.api.urls')),
+    path("api/passport/", include('passport_indicators.api.urls')),
     path('api/oauth/', include('oauth.api.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

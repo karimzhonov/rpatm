@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import AppLayout from '@/layout/AppLayout.vue';
 import ichd from './ichd';
-
+import passport from './passport';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -15,6 +15,7 @@ const router = createRouter({
                     component: () => import('@/views/HomeView.vue')
                 },
                 ...ichd,
+                ...passport,
             ]
         },
 

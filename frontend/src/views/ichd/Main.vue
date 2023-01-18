@@ -6,23 +6,15 @@
 </div>
 <div v-if="!loading">
   <div class="row">
-    <div class="col-12 row p-3 mb-0 p-0">
-        <div>
-            <div class="home-main-header mb-1">
-                <img style="color: var(--surface-900)" class="mr-2" :src="logo" width="150"/>
-                {{ $t("индекс человеческого достоинства") }}
-            </div>
-        </div>
-    </div>
     <h1 class="m-3 text-center">{{ $t('Показатели города') }}</h1>
     <div class="col-12 row p-0">
         <div class="col-3">
             <router-link :to="{name: 'ichd_region', query: {year: $route.query.year, file: $route.query.file}}">
             <div class="card rounded-4" style="padding: 16px" v-tooltip.top="{value: $t(`Нажмите что бы увидеть по районам`), escape: true, class: 'text-center'}">
                 <div class="row" style="text-align: center;">
-                    <div class="col">
+                    <div class="col pl-0 pr-0">
                         <div class="col p-0 text-900 font-medium" style="font-size: 2.5rem">{{home_city_data.criteria[0].index}}</div>
-                        <p class="text-center text-500 font-medium" style="font-size: 2rem;">{{home_city_data.criteria[0].criteria.name}}</p>
+                        <p :style="`${$t(`${home_city_data.criteria[0].criteria.name}`).length < 20 ? 'font-size: 2rem': 'font-size: 1.3rem'};`" style="line-height: 3rem;" class="text-center text-500 font-medium" >{{$t(`${home_city_data.criteria[0].criteria.name}`)}}</p>
                     </div>
                 </div>
             </div>
@@ -30,7 +22,7 @@
         </div>
         <div class="col">
             <router-link :to="{name: 'ichd_data_table', query: {file: $route.query.file, year: $route.query.year, index_color:'red'}}">
-                <div class="card rounded-4">
+                <div class="card rounded-4 p-auto">
                     <div style="text-align: center;">
                         <div class="row justify-content-center mb-1 pr-4 align-items-center">
                             <div class="col p-0 text-900 font-medium text-xl">
@@ -92,7 +84,7 @@
                     </div>
                 </div>
                 <div class="col p-0 text-900 font-medium text-xl">{{item.index}}</div>
-                <p class="text-center text-500 font-medium">{{item.criteria.name}}</p>
+                <p class="text-center text-500 font-medium">{{ $t(`${item.criteria.name}`)}}</p>
             </div>
             </router-link>
         </div>
@@ -182,15 +174,12 @@
 import Speedometer from "@/components/Speedometer.vue";
 import store from "@/store";
 import Bar from "@/components/Bar.vue";
-import logo_light from "@/assets/images/logo minimalis.svg"
-import logo_dark from "@/assets/images/logo minimalist light (1).svg"
 
 export default {
   name: "ICHDMainView",
   components: {Speedometer, Bar},
   data() {
     return {
-        logo_light, logo_dark,
         icon_bg_color_classes: ['text-blue-300', 'text-green-300', 'text-orange-300', 'text-red-300', 'text-purple-300', 'text-blue-300', 'text-yellow-300', 'text-green-300'],
         icons: ['fa-solid fa-kit-medical', 'fa-solid fa-briefcase', 'fa-solid fa-graduation-cap', 
         'fa-solid fa-wallet', 'fa-solid fa-hands-holding-child', 'fa-solid fa-shield-halved', 'fa-solid fa-building-wheat', 'fa-solid fa-chart-line']
@@ -211,21 +200,6 @@ export default {
     home_sectors_data: () => store.state.home_sectors_data,
     loading: () => store.state.loading,
     home_city_data: () => store.state.home_city_data,
-    logo() {
-        return !store.state.darkMode ? this.logo_light : this.logo_dark
-    }
   }
 }
 </script>
-
-<style>
-
-.home-main-header {
-  margin-bottom: 5rem;
-  font-size: 2.5rem;
-  text-transform: uppercase;
-  text-align: center;
-  line-height: 70px;
-  color: var(--surface-900);
-}
-</style>

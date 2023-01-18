@@ -162,7 +162,7 @@ class AreaTableSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(AreaTableCriteriaSerializer(many=True))
     def get_criteria(self, obj: AreaTable):
-        return AreaTableCriteriaSerializer(obj.areatablecriteria_set.all().order_by('criteria__order'), many=True,
+        return AreaTableCriteriaSerializer(obj.areatablecriteria_set.filter(criteria__main=False).order_by('criteria__order'), many=True,
                                            context=self.context).data
 
     @extend_schema_field(serializers.FloatField())

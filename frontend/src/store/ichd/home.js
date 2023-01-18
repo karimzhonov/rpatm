@@ -1,7 +1,9 @@
 import axios from "@/plugins/axios"
 
 export default {
-    state: {home_sectors_data: [], home_city_data: {}},
+    state: {
+        home_sectors_data: [], home_city_data: {},
+    },
     actions: {
         async fetch_home_sectors_data(context, params={}){
             const table = await axios.get('/api/ichd/home-sector-chart/', {params})

@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     async selected_bar(index) {
-      if (index !== 0) {
         const criteria = await store.dispatch('search_criteria', store.state.area_line_chart_labels[index])
         await this.$router.push({
           name: 'sector_id_region_id_area_id_table_id', params: {
@@ -57,7 +56,6 @@ export default {
             region_id: this.region_id, area_id: this.area_id,
           },  query: this.$route.query
         })
-      }
     },
     async multiselect_change(e) {
         const files = []
