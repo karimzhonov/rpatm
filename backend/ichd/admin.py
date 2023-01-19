@@ -50,7 +50,7 @@ class UploadsAdmin(admin.ModelAdmin):
             instance.set_finished()
         except Exception as _exp:
             instance.set_error(str(_exp))
-            raise _exp
+            raise Exception(_exp)
 
     def get_deleted_objects(self, objs, request):
         try:

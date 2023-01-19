@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
+import datetime
 import os
 from pathlib import Path
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "ichd",
     "oauth",
+    "log_viewer",
 ]
 
 MIDDLEWARE = [
@@ -153,34 +155,86 @@ CELERY_RESULT_BACKEND = "redis://ichd_redis:6379"
 #         'schedule': crontab(hour=4, minute=0)},
 # }
 
-if not DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'handlers': {
-            'warning': {
-                'level': 'WARNING',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(BASE_DIR, 'logs/warning.log'),
-            },
-            'error': {
-                'level': 'ERROR',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(BASE_DIR, 'logs/error.log'),
-            },
-            'critical': {
-                'level': 'CRITICAL',
-                'class': 'logging.FileHandler',
-                'filename': os.path.join(BASE_DIR, 'logs/critical.log'),
-            },
+NOW = datetime.datetime.now()
+DAY_NAME = NOW.strftime("%A").lower()
+
+MAXIMUM_FILE_LOGS = 1024 * 1024 * 10  # 10 MB
+BACKUP_COUNT = 5
+LOGIN_URL = "/admin/login/"
+LOGIN_REDIRECT_URL = "/"
+
+if not os.path.exists(os.path.join(BASE_DIR, 'logs')):
+    os.mkdir(os.path.join(BASE_DIR, 'logs'))
+
+if not os.path.exists(os.path.join(BASE_DIR, 'logs', 'error.log')):
+    with open(os.path.join(BASE_DIR, 'logs', 'error.log'), 'w+'):
+        pass
+
+if not os.path.exists(os.path.join(BASE_DIR, 'logs', 'warning.log')):
+    with open(os.path.join(BASE_DIR, 'logs', 'warning.log'), 'w+'):
+        pass
+
+if not os.path.exists(os.path.join(BASE_DIR, 'logs', 'critical.log')):
+    with open(os.path.join(BASE_DIR, 'logs', 'critical.log'), 'w+'):
+        pass
+
+if not os.path.exists(os.path.join(BASE_DIR, 'logs', 'celery.log')):
+    with open(os.path.join(BASE_DIR, 'logs', 'celery.log'), 'w+'):
+        pass
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {"format": "[%(levelname)s] %(asctime)s %(name)s: %(message)s"},
+    },
+    "handlers": {
+        "warning": {
+            "level": "WARNING",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/warning.log",
+            "maxBytes": MAXIMUM_FILE_LOGS,
+            "backupCount": BACKUP_COUNT,
+            "formatter": "standard",
         },
-        'loggers': {
-            'django': {
-                'handlers': ['warning', 'error', 'critical'],
-                'propagate': True,
-            },
+        "error": {
+            "level": "ERROR",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/error.log",
+            "maxBytes": MAXIMUM_FILE_LOGS,
+            "backupCount": BACKUP_COUNT,
+            "formatter": "standard",
         },
-    }
+        "critical": {
+            "level": "CRITICAL",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/critical.log",
+            "maxBytes": MAXIMUM_FILE_LOGS,
+            "backupCount": BACKUP_COUNT,
+            "formatter": "standard",
+        },
+        'celery': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/celery.log',
+            "maxBytes": MAXIMUM_FILE_LOGS,
+            "backupCount": BACKUP_COUNT,
+            "formatter": "standard",
+        },
+    },
+    "root": {"handlers": ["warning"], "level": "DEBUG"},
+    "loggers": {
+        "django": {
+            "handlers": [
+                "error",
+                "warning",
+                "critical",
+                "celery"
+            ],
+            "propagate": False,
+        },
+    },
+}
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -207,6 +261,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
     'DATETIME_FORMAT': "%d.%m.%Y %H:%M:%S",
 }
+
+LOG_VIEWER_FILES_DIR = BASE_DIR / 'logs'
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'ICHD',

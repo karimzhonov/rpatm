@@ -20,6 +20,7 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
+    path('admin/logs/', include('log_viewer.urls')),
     path("admin/", admin.site.urls),
     path("i18n/", include('django.conf.urls.i18n')),
     path("api/ichd/", include('ichd.api.urls')),
