@@ -229,10 +229,16 @@ LOGGING = {
                 "error",
                 "warning",
                 "critical",
+            ],
+            "propagate": True,
+        },
+        "celery": {
+            "handlers": [
                 "celery"
             ],
-            "propagate": False,
-        },
+            "level": "ERROR",
+            "propagate": True,
+        }
     },
 }
 
