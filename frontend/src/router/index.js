@@ -6,18 +6,21 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: '/:lang',
             component: AppLayout,
+            props: true,
             children: [
                 {
-                    path: '/',
+                    path: '/:lang',
                     name: 'home',
-                    component: () => import('@/views/HomeView.vue')
+                    component: () => import('@/views/HomeView.vue'),
+                    props: true
                 },
                 {
-                    path: '/auth/login',
+                    path: '/:lang/auth/login',
                     name: 'login',
-                    component: () => import('@/views/Login.vue')
+                    component: () => import('@/views/Login.vue'),
+                    props: true
                 },
                 ...ichd,
                 ...passport,

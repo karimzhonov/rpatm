@@ -12,6 +12,7 @@ import navbar_logo_panel from "@/assets/images/Безымянный-1.svg"
 const {changeThemeSettings ,onMenuToggle, layoutConfig} = useLayout();
 
 export default {
+  props: ['lang'],
   setup() {
     const {t} = useI18n()
     return {t}
@@ -52,8 +53,7 @@ export default {
   async mounted() {
     this.mode_chack = localStorage.getItem('dark')
     this.bindOutsideClickListener();
-    const user_lang = store.getters.get_selected_lang
-    store.commit('select_lang', {lang: user_lang || 'uz-cl', i18n: this.$i18n})
+    store.commit('select_lang', {lang: this.lang, i18n: this.$i18n})
 
     if (localStorage.getItem('dark') === null) {
       localStorage.setItem('dark', false)
@@ -97,6 +97,9 @@ export default {
       return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
     },
     language_change(e) {
+      const params = {...this.$route.params}
+      params.lang = e.value
+      this.$router.push({'name': this.$route.name, params, query: this.$route.query})
       store.commit('select_lang', {lang: e.value, i18n: this.$i18n})
     },
 
@@ -179,7 +182,7 @@ export default {
 
     <div class="layout-topbar-menu m-0" :class="topbarMenuClasses">
       <Dropdown class="ml-3" :options="language_menu_items" optionLabel="lang"
-                optionValue="code" :model-value="selected_lang"
+                optionValue="code" :model-value="lang"
                 @change="language_change" inputStyle="padding: 1rem"
       />
       <ToggleButton class="ml-3 mr-3" v-model="mode_chack" onIcon="pi pi-moon" offIcon="pi pi-sun" :onLabel="$t('')" :off-label="$t('')" @change="onChangeTheme"/>

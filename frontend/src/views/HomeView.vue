@@ -14,6 +14,7 @@
 <script>
 import store from "@/store";
 import L from "leaflet"
+import {i18n} from '@/main'
 
 export default {
   name: "HomeView",
@@ -29,6 +30,7 @@ export default {
   },
   methods: {
     async init_map() {
+      const {t} = i18n.global
       const area_data_layer = await this.get_ichd_layer()
       const map = L.map('map', {
         center: [41.3018622, 69.2684895],
@@ -40,16 +42,16 @@ export default {
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
       }).addTo(map);
-
+      
       // add overlays
-      const overlays = {
-        'Индекс человеческого достоинства': area_data_layer
-      };
+      const overlays = {};
+      overlays[t('Индекс человеческого достоинства')] = area_data_layer
       L.control.layers({}, overlays).addTo(map);
       // Delete Leaflet link
       map.attributionControl.setPrefix('')
     },
     async get_ichd_layer() {
+      const {t} = i18n.global
       // Fetch data
       const area_table = await store.dispatch('fetch_map_area_data', {file: 0})
       this.loading_map = false
@@ -69,14 +71,20 @@ export default {
         if (props) {
           const area = area_dict[props.area_id]
           if (area) {
+            let criteria_html = []
+            for (let c of area.criteria) {
+              criteria_html.push(`<p>${t(c.criteria)}: <b>${c.index}</b></p>`)
+            }
             info_div.innerHTML = `
-            <h5>Индекс человеческого достоинства</h5>
-            <p class="text-center" style="font-size: 1.5rem">${area.area.name}</p>`
+            <p class="text-center" style="font-size: 1.5rem">${area.area.name}</p>
+            <p>${t('Индекс человеческого достоинства')}: <b>${area.index}</b> (${area.delta_index})</p>
+            ${criteria_html.join('\n')}
+            `
           }
         } else {
+          console.log(this.t);
           info_div.innerHTML = `
-            <h5>Индекс человеческого достоинства</h5>
-            <p class="text-center">Выберите махаллю</p>`
+            <p class="text-center">${t('Выберите махаллю')}</p>`
         }        
       };
       // Create layer
@@ -89,7 +97,7 @@ export default {
             return {
                   fillColor: all_colors[Math.round(area.index * 10) - 1],
                   weight: 2,
-                  opacity: 0.5,
+                  opacity: 1,
                   color: 'white',
                   dashArray: '3',
                   fillOpacity: 0.7,

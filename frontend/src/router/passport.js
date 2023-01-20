@@ -4,12 +4,12 @@ export default [{
     children: 
     [
         {
-            path: '/passport',
+            path: '/:lang/passport',
             name: 'passport_main',
             component: () => import('@/views/passport_indicators/Main.vue')
         },
         {
-            path: '/passport/region/:region_id',
+            path: '/:lang/passport/region/:region_id',
             name: 'passport_region_data',
             component: () => import('@/views/passport_indicators/RegionData.vue'),
             props: true

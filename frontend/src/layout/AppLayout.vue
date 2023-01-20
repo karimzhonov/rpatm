@@ -1,11 +1,21 @@
 <script setup>
-import { computed, watch, ref } from 'vue';
+import { computed, watch, ref, defineProps } from 'vue';
 import AppTopbar from './AppTopbar.vue';
 import { useLayout } from '@/layout/composables/layout';
+import router from '@/router';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 const outsideClickListener = ref(null);
+const props = defineProps(['lang'])
+
+const lang = computed(() => {
+    if (['ru', 'uz-cl'].includes(props.lang)) {
+        return props.lang
+    }
+    router.push({to: 'home', params: {lang: 'ru'}})
+    return 'ru'
+})
 
 watch(isSidebarActive, (newVal) => {
     if (newVal) {
@@ -56,7 +66,7 @@ const isOutsideClicked = (event) => {
 
 <template>
     <div class="layout-wrapper" :class="containerClass">
-        <app-topbar></app-topbar>
+        <app-topbar :lang="lang"></app-topbar>
         <div class="layout-main-container" style="width: 100%; margin-left: 0px; padding-left: 2rem">
             <div class="layout-main">
                 <router-view :key="$route.fullPath"></router-view>

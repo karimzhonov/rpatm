@@ -117,7 +117,7 @@ library.add(faKitMedical, faPerson, faBriefcase, faGraduationCap, faWallet, faHa
 
 export const app = createApp(App);
 
-const i18n = createI18n({
+export const i18n = createI18n({
   legacy: false,
   locale: "ru",
   fallbackLocale: "en",

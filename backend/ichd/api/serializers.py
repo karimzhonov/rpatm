@@ -186,6 +186,14 @@ class DataTableSerializer(serializers.ModelSerializer):
         exclude = ['index_delta']
 
 
+class DataTableShortSerializer(serializers.ModelSerializer):
+    criteria = CriteriaSerializer()
+
+    class Meta:
+        model = DataTable
+        exclude = ['index_delta']
+
+
 class CityCriteriaTableSerializer(serializers.ModelSerializer):
     criteria = serializers.SerializerMethodField()
     index = serializers.SerializerMethodField()
