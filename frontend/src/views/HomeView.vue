@@ -45,11 +45,47 @@ export default {
       
       // add overlays
       const overlays = {};
-      overlays[t('Индекс человеческого достоинства')] = area_data_layer
+      overlays[`<span class="user-select-none" style="font-size: 1rem">${t('Индекс человеческого достоинства')}</span>`] = area_data_layer
+      overlays[`<span class="user-select-none" style="font-size: 1rem">${t('Гипермаркеты, магазины')}</span>`] = await this.get_shop_layer()
+      overlays[`<span class="user-select-none" style="font-size: 1rem">${t('Аптеки')}</span>`] = await this.get_apteka_layer()
       L.control.layers({}, overlays).addTo(map);
       // Delete Leaflet link
       map.attributionControl.setPrefix('')
     },
+    async get_shop_layer() {
+      const icon = L.icon({
+        iconUrl: '/maps/icons/shop.png',
+        iconSize:     [38, 60], // size of the icon
+        iconAnchor:   [22, 60], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      })
+
+      const r = await fetch('/maps/shop.geojson')
+      const data = await r.json()
+      const markers = []
+      for (let point of data.features) {
+        let marker = L.marker([point.properties.y, point.properties.x], {icon}).bindPopup(`<h4 class="text-center">${point.properties.name}</h4>`)
+        markers.push(marker)
+      }
+      return L.layerGroup(markers)
+    },
+    async get_apteka_layer(){
+      const icon = L.icon({
+        iconUrl: '/maps/icons/apteka.png',
+        iconSize:     [38, 60], // size of the icon
+        iconAnchor:   [22, 60], // point of the icon which will correspond to marker's location
+        popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      })
+
+      const r = await fetch('/maps/apteka.geojson')
+      const data = await r.json()
+      const markers = []
+      for (let point of data.features) {
+        let marker = L.marker([point.properties.y, point.properties.x], {icon}).bindPopup(`<h4 class="text-center">${point.properties.name}</h4>`)
+        markers.push(marker)
+      }
+      return L.layerGroup(markers)
+    },  
     async get_ichd_layer() {
       const {t} = i18n.global
       // Fetch data
@@ -82,7 +118,6 @@ export default {
             `
           }
         } else {
-          console.log(this.t);
           info_div.innerHTML = `
             <p class="text-center">${t('Выберите махаллю')}</p>`
         }        
