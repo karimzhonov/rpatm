@@ -8,7 +8,7 @@
   <BackOrStart :header="area.name" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
                 {label: region.name, to: {name: 'sector_id_region_id_area', params: {sector_id: sector_id, region_id: region_id},  query: $route.query}},
-            ]"/>
+            ]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
 
   <div class="grid row m-1 justify-content-around">
     <div class="card mt-3 rounded-4">

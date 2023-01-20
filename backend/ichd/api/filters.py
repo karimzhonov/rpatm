@@ -89,10 +89,11 @@ class AreaTableFilter(filters.FilterSet):
     sector = filters.BaseInFilter()
     area = filters.BaseInFilter()
     file = filters.BaseInFilter(method='filter_file')
+    global_id = filters.BaseInFilter(method='filter_global_id')
 
     class Meta:
         model = AreaTable
-        fields = ['area', 'file', 'sector', 'region']
+        fields = ['area', 'file', 'sector', 'region', 'global_id']
 
     def filter_file(self, queryset, name, value):
         if value == ['0']:
@@ -100,6 +101,9 @@ class AreaTableFilter(filters.FilterSet):
                 Uploads.objects.filter(status='finished').order_by('-date')[:1].values('id')
             ))
         return queryset.filter(file_id__in=value).order_by('file__date')
+
+    def filter_global_id(self, queryset, name, value):
+        return queryset.filter(area__global_id__in=value)
 
 
 class DataTableFilter(filters.FilterSet):

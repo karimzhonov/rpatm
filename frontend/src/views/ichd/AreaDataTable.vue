@@ -7,7 +7,7 @@
       <div v-if="!loading">
         <BackOrStart :header="`${region.name} (${criteria.name})`" :navigator="[
           {label: $t('Районы'), to: {name: 'ichd_region-data-table', query: {file: $route.query.file, year: $route.query.year, criteria: $route.query.criteria}}},
-        ]"/>
+        ]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
         <div class="card mt-3 rounded-4">
           <div class="col-12">
             <div class="row">

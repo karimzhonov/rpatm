@@ -31,6 +31,7 @@ class Area(models.Model):
     name = models.CharField(max_length=255)
     region = models.ForeignKey(Region, models.CASCADE)
     sector = models.ForeignKey(Sector, models.SET_NULL, blank=True, null=True)
+    global_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -59,6 +60,7 @@ class Criteria(models.Model):
 
 class Uploads(models.Model):
     STATUS = (
+        ('created', _('Created')),
         ('progres', _("In progres")),
         ('finished', _("Finished")),
         ('error', _("Error"))
@@ -66,7 +68,7 @@ class Uploads(models.Model):
     file = models.FileField(upload_to='xlsx')
     name = models.CharField(max_length=255, blank=True)
     date = models.DateField()
-    status = models.CharField(max_length=100, default='progres', choices=STATUS)
+    status = models.CharField(max_length=100, default='created', choices=STATUS)
     create_date = models.DateTimeField(auto_now_add=True)
     finish_date = models.DateTimeField(blank=True, null=True)
     message = models.TextField(editable=False, blank=True, null=True)

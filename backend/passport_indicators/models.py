@@ -44,6 +44,7 @@ class Uploads(models.Model):
 
 class Region(models.Model):
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='region', blank=True, null=True)
 
     def __str__(self) -> str:
         return self.name

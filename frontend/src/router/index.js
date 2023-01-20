@@ -14,15 +14,14 @@ const router = createRouter({
                     name: 'home',
                     component: () => import('@/views/HomeView.vue')
                 },
+                {
+                    path: '/auth/login',
+                    name: 'login',
+                    component: () => import('@/views/Login.vue')
+                },
                 ...ichd,
                 ...passport,
             ]
-        },
-
-        {
-            path: '/auth/login',
-            name: 'login',
-            component: () => import('@/views/Login.vue')
         },
     ]
 });

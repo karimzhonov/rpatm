@@ -5,7 +5,7 @@
                 </div>
   </div>
   <div v-if="!loading">
-    <BackOrStart :header="region.name" :navigator="[]"/>
+    <BackOrStart :header="region.name" :navigator="[]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
 
   <div class="grid row justify-content-around">
     <div class="col-3" v-for="item in region_sectors" :key="item">

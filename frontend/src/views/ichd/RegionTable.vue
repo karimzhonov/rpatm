@@ -5,7 +5,7 @@
                     </div>
       </div>
       <div v-if="!loading">
-        <BackOrStart :header="`${$t('Районы')} (${$t(criteria.name)})`" :navigator="[]"/>
+        <BackOrStart :header="`${$t('Районы')} (${$t(criteria.name)})`" :navigator="[]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
         <div class="card mt-3 rounded-4">
           <div class="col-12">
             <div class="row">

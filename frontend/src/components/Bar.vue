@@ -2,6 +2,7 @@
     <VueApexCharts type="bar" :options="chartOptions" :series="series"/>
 </template>
 <script>
+import store from "@/store";
 import VueApexCharts from "vue3-apexcharts";
 
 export default {

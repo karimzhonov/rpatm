@@ -1,7 +1,6 @@
 <template>
   <div class="flex justify-content-between align-items-center mb-4">
     <div>
-<!--      <Button icon="pi pi-arrow-circle-left" @click="go_back"/>-->
       <Breadcrumb :model="navigator" :home="home" class="rounded-3"/>
     </div>
     <h1 class="m-0">
@@ -18,17 +17,12 @@
 <script>
 export default {
   name: "BackOrStart",
-  props: ['header', 'navigator'],
+  props: ['header', 'navigator', 'home_to'],
   data() {
     return {
-      home: {icon: 'pi pi-home', to: {name: 'ichd_main', query: this.$route.query}},
+      home: {icon: 'pi pi-home', to: this.home_to},
     }
   },
-  methods: {
-    go_back() {
-      window.history.back()
-    }
-  }
 }
 </script>
 

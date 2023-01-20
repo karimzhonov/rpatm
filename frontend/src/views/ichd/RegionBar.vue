@@ -5,7 +5,7 @@
                     </div>
       </div>
       <div v-if="!loading">
-        <BackOrStart :header="$t('По районам')" :navigator="[]"/>
+        <BackOrStart :header="$t('По районам')" :navigator="[]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
       <div class="card rounded-4">
         <Bar :series="datasets" :labels="labels" @dataPointSelection="async (e, chart, config) => await bar_selected(labels[config.dataPointIndex])"/>
       </div>

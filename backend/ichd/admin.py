@@ -118,7 +118,8 @@ class RegionAdmin(admin.ModelAdmin):
 @admin.register(Area)
 class AreaAdmin(admin.ModelAdmin):
     ordering = ['name']
-    list_display = ['name', 'region', 'sector']
+    list_display = ['global_id', 'name', 'region', 'sector']
+    list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['region', 'sector']
 

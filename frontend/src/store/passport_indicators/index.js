@@ -3,10 +3,11 @@ import axios from "@/plugins/axios";
 export default {
     state: {
         selected_files: {}, selected_file: {}, top_bar_years: [],
+        regions: [], region: {}, data: []
     },
     actions: {
         async fetch_top_bar_files_passport(context) {
-            const table = await axios.get('/api/ichd/uploads/')
+            const table = await axios.get('/api/passport/upload/')
             const years = {}
             for (let file of table.data) {
                 if (!years[file.date.split('-')[0]]) {
@@ -43,5 +44,20 @@ export default {
 
             return Object.values(years)
         },
+        async fetch_regions_passport(context, params={}) {
+            const r = await axios.get('/api/passport/region/', {params})
+            context.commit('basic', {key: 'regions', value: r.data})
+            return r.data
+        },
+        async fetch_region_passport(context, region_id) {
+            const r = await axios.get(`/api/passport/region/${region_id}`)
+            context.commit('basic', {key: 'region', value: r.data})
+            return r.data
+        },
+        async fetch_data_table_passport(context, params={}) {
+            const r = await axios.get('/api/passport/data-table/', {params})
+            context.commit('basic', {key: 'data', value: r.data})
+            return r.data
+        }
     }
 }

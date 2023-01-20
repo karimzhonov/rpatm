@@ -9,6 +9,7 @@ import criteria from "@/store/ichd/criteria";
 import area from "@/store/ichd/area"
 import ichd_home from "./ichd/home"
 import passport from "./passport_indicators"
+import map from "./map";
 import axios from "@/plugins/axios";
 
 export default createStore({
@@ -32,6 +33,10 @@ export default createStore({
     actions: {
         get_random_color() {
             return "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")
+        },
+        async get_gradient_color(context, value) {
+            const all_colors = ["#EE391F", "#EE391F", "#EE391F", "#EE391F", "#EE391F", "#FAA10B", "#FAB807", "#F1E000", "#A4D12A", "#27B973"]
+            return all_colors[Math.round(value * 10) - 1]
         },
         async fetch_main_data(context, params) {
             const data = await axios.get('/api/ichd/data-table/', {params})
@@ -104,5 +109,6 @@ export default createStore({
         criteria,
         area,
         passport,
+        map,
     },
 });

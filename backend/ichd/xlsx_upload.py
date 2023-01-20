@@ -88,7 +88,7 @@ def parse_sector(instance):
 
 
 def parse_area(instance):
-    ignore_columns = ['Ўрин', 'Туман', 'Сектор', 'Маҳалла', 'Ўрин ўзгариш']
+    ignore_columns = ['Ўрин', 'Туман', 'Сектор', 'Маҳалла', 'Ўрин ўзгариш', 'ID']
     xlsx = pd.read_excel(io.BytesIO(instance.file.read()), 'area', engine='openpyxl')
     for row in xlsx.iloc:
         order = int(row['Ўрин'])
@@ -100,6 +100,9 @@ def parse_area(instance):
             sector = str(row['Сектор'])
         sector, _ = models.Sector.objects.get_or_create(number=sector)
         area, _ = models.Area.objects.get_or_create(name=row['Маҳалла'], region_id=region.id, sector_id=sector.id)
+        if not area.global_id == row['ID']:
+            area.global_id = row['ID']
+            area.save()
         area_table = models.AreaTable(
             order=order, delta_order=order_delta, region_id=region.id,
             file_id=instance.id, sector_id=sector.id, area_id=area.id

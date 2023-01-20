@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "ichd",
     "oauth",
     "passport_indicators",
+    "map",
 ]
 
 MIDDLEWARE = [
@@ -210,8 +211,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'ICHD',
-    'DESCRIPTION': 'Index chelovechskogo dostoinsvo',
+    'TITLE': 'RPATM',
+    'DESCRIPTION': 'Raqamli poytaxt axborat taxlil markazi',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS

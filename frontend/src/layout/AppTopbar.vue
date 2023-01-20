@@ -124,6 +124,9 @@ export default {
       localStorage.removeItem('refresh')
       await this.$router.push({name: 'home'})
     },
+    async onNavbarLoginButton() {
+      await this.$router.push({name: 'login'})
+    }
   },
   computed: {
     topbarMenuClasses() {
@@ -136,7 +139,8 @@ export default {
     logo_panel() {
         return !store.state.darkMode ? this.navbar_icon_1 : this.navbar_icon_1_dark
     },
-    darkMode: () => store.state.darkMode
+    darkMode: () => store.state.darkMode,
+    is_auth: () => localStorage.getItem('access')
   }
 }
 </script>
@@ -179,7 +183,11 @@ export default {
                 @change="language_change" inputStyle="padding: 1rem"
       />
       <ToggleButton class="ml-3 mr-3" v-model="mode_chack" onIcon="pi pi-moon" offIcon="pi pi-sun" :onLabel="$t('')" :off-label="$t('')" @change="onChangeTheme"/>
-      <button @click="onNavbarLogoutButton()" class="p-link layout-topbar-button m-auto">
+      <button v-if="!is_auth" @click="onNavbarLoginButton()" class="p-link layout-topbar-button m-auto">
+        <i class="pi pi-sign-in"></i>
+        <span>{{ $t("Выйти") }}</span>
+      </button>
+      <button v-if="is_auth" @click="onNavbarLogoutButton()" class="p-link layout-topbar-button m-auto">
         <i class="pi pi-sign-out"></i>
         <span>{{ $t("Выйти") }}</span>
       </button>

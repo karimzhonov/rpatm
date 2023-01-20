@@ -7,7 +7,7 @@
   <div v-if="!loading">
   <BackOrStart :header="`${$t('Сектор')} - ${sector.number}`" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
-            ]"/>
+            ]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
 
   <div class="grid justify-content-around">
     <div class="col-3" v-for="item in region_sectors" :key="item.id">

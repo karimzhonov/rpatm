@@ -7,7 +7,7 @@
 <div v-if="!loading">
     <BackOrStart :header="region.name" :navigator="[
                 {label: `${$t('Сектор')} - ${sector.number}`, to: {name: 'sector_id_region', params: {sector_id: sector_id}, query: $route.query}},
-            ]"/>
+            ]" :home_to="{name: 'ichd_main', query: this.$route.query}"/>
     <div class="card rounded-4" v-for="bar in sector_region_bar_chart_data" :key="bar">
         <Bar :series="bar.datasets" :labels="bar.labels" @dataPointSelection="(e, chart, config) => bar_selected(bar.labels[config.dataPointIndex])"/>
     </div>

@@ -1,12 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
 import store from '@/store';
 import logo_dark from "@/assets/images/Dark.png"
 import logo_light from "@/assets/images/Light (1).png"
 import logo_rpatm_light from "@/assets/images/Group 332.4785d398.svg"
-const router = useRouter()
-
+import logo_panel from "@/assets/images/Безымянный-1.svg"
 const username = ref('');
 const password = ref('');
 const darkMode = computed(() => store.state.darkMode)
@@ -16,7 +14,7 @@ const logoUrl = computed(() => {
 });
 
 const logoRpatm = computed(() => {
-    return store.state.darkMode ? '' : logo_rpatm_light
+    return store.state.darkMode ? logo_rpatm_light : logo_rpatm_light
 })
 
 const login = async () => {
@@ -30,7 +28,7 @@ const login = async () => {
 </script>
 
 <template>
-    <div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="surface-ground flex align-items-center justify-content-center min-h-screen overflow-hidden">
         <div class="flex flex-column align-items-center justify-content-center">
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                 <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius: 53px">
@@ -45,6 +43,7 @@ const login = async () => {
               d="M81.492 45.417c.063.078-.007.205-.38.644-.253.297-.457.566-.457.594 0 .028.246.31.549.636.5.538.57.587.858.616.295.035.302.028.14-.057-.154-.078-.745-.679-1.146-1.167-.126-.148-.126-.156.352-.665.26-.276.576-.551.689-.6.204-.093.197-.093-.24-.1-.372 0-.435.014-.365.1zM85.043 46.542c-.415.898-.605 1.237-.731 1.301-.162.085-.134.092.246.085.232 0 .38-.021.337-.043-.126-.05-.112-.254.028-.551l.12-.248h1.069l.12.248c.14.297.154.502.034.551-.049.022.113.043.366.043.408.007.436-.007.288-.085-.126-.064-.316-.396-.703-1.266-.295-.643-.548-1.195-.57-1.216-.02-.021-.295.509-.604 1.18zm.893.063l.134.34h-.978l.14-.34c.078-.183.198-.445.254-.58l.105-.247.106.248c.056.134.169.395.239.58zM89.17 45.545c0 .212.008.219.064.07.063-.148.105-.155.745-.155.563 0 .668.014.64.099-.02.056-.351.58-.738 1.153-.38.572-.717 1.089-.746 1.131-.042.07.176.092.978.092h1.027l.105-.248c.134-.332.127-.339-.105-.098-.204.197-.225.205-.922.205-.548 0-.696-.022-.66-.092.027-.043.365-.559.745-1.132.386-.573.717-1.096.738-1.153.028-.084-.112-.099-.921-.099h-.956l.007.227zM93.734 45.41l.176.092v2.249l-.176.092c-.154.078-.126.092.317.085.365 0 .45-.021.337-.064-.162-.063-.162-.092-.162-1.223 0-1.132.008-1.16.162-1.238.127-.063.07-.078-.337-.078-.443-.007-.472.007-.317.085zM33.36 46.054c-.205.205-.24.29-.24.573 0 .282.035.367.24.572.196.199.294.24.526.24.64 0 1.013-.466.851-1.067-.098-.36-.38-.559-.808-.559-.282 0-.366.036-.57.24zM61.971 46.06c-.232.234-.246.27-.217.616.049.481.33.764.766.764.626 0 .998-.467.837-1.068-.099-.36-.38-.559-.809-.559-.281 0-.366.036-.577.248z"
               fill="#152039"></path>
                         </svg>
+                        <img v-if="darkMode" :src="logo_panel" alt="logo-1"/>
                         <div class="text-900 text-3xl font-medium mb-3">{{ $t('Авторизация') }}</div>
                     </div>
 
